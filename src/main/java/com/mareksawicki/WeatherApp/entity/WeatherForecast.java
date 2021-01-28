@@ -12,7 +12,7 @@ import javax.persistence.*;
 public class WeatherForecast {
 
   @Id
-  @GeneratedValue
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
   private Double temperature;
   private Double pressure;
@@ -21,9 +21,5 @@ public class WeatherForecast {
   private Double windSpeed;
   @Column(name = "wind_deg")
   private Double windDeg;
-
-  @OneToOne(fetch = FetchType.LAZY)
-  @Getter(value = AccessLevel.NONE)
-  private Forecast forecast;
 
 }

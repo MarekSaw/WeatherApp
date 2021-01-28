@@ -20,7 +20,7 @@ public class Forecast {
   @Id
   @GeneratedValue
   private long id;
-  @OneToOne(mappedBy = "forecast")
+  @OneToOne(cascade = CascadeType.ALL)
   private WeatherForecast weatherForecast;
   private WeatherSource source;
   private String localization;
