@@ -2,6 +2,7 @@ package com.mareksawicki.WeatherApp.entity;
 
 import com.mareksawicki.WeatherApp.enums.WeatherSource;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -13,6 +14,7 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Forecast {
 
   @Id
