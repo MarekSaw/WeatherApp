@@ -6,15 +6,15 @@ import com.mareksawicki.WeatherApp.enums.WeatherSource;
 import com.mareksawicki.WeatherApp.exception.ForecastNotFoundException;
 import com.mareksawicki.WeatherApp.model.weatherbit.WeatherBitForecast;
 import com.mareksawicki.WeatherApp.repository.ForecastRepository;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 
-@Service
+@Service("weatherBitService")
 public class WeatherBitServiceImpl implements WeatherService {
   private final static String URI_PATTERN_WEATHER_CITY = "https://api.weatherbit.io/v2.0/forecast/daily?key=%s&city=%s&units=M";
   private final static String URI_PATTERN_WEATHER_COORDINATES = "https://api.weatherbit.io/v2.0/forecast/daily?key=%s&units=M&lat=%f&lon=%f";
@@ -29,7 +29,7 @@ public class WeatherBitServiceImpl implements WeatherService {
   private Forecast previousForecast;
   private WeatherForecast weatherForecast;
 
-  public WeatherBitServiceImpl(WeatherSource weather_bit, LocalDate tomorrow, LocalDateTime today_midnight, RestTemplate restTemplate, ForecastRepository forecastRepository) {
+  public WeatherBitServiceImpl(@Qualifier("WEATHER_BIT") WeatherSource weather_bit, LocalDate tomorrow, LocalDateTime today_midnight, RestTemplate restTemplate, ForecastRepository forecastRepository) {
     WEATHER_BIT = weather_bit;
     TOMORROW = tomorrow;
     TODAY_MIDNIGHT = today_midnight;
@@ -50,7 +50,6 @@ public class WeatherBitServiceImpl implements WeatherService {
       return previousForecast.getWeatherForecast();
     }
     String uri = String.format(URI_PATTERN_WEATHER_CITY, weatherBitApikey, city);
-    System.out.println(uri);
     weatherForecast = getForecastForDate(uri, date);
     forecastRepository.save(Forecast.builder()
       .weatherForecast(weatherForecast)
@@ -95,7 +94,7 @@ public class WeatherBitServiceImpl implements WeatherService {
         .orElseThrow(() -> new ForecastNotFoundException("There is no forecast for given date"))
         .toWeatherForecast();
     } else {
-      throw new ForecastNotFoundException("There is an error in relation with GET request to WeatherBit API");
+      throw new ForecastNotFoundException("Could not find forecast for given location");
     }
   }
 

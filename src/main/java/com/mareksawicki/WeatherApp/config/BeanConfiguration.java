@@ -19,6 +19,11 @@ public class BeanConfiguration {
     return WeatherSource.WEATHER_BIT;
   }
 
+  @Bean(name = "OPEN_WEATHER")
+  public WeatherSource getOpenWeather() {
+    return WeatherSource.OPEN_WEATHER;
+  }
+
   @Bean(name = "TOMORROW")
   public LocalDate getTomorrowDate() {
     return LocalDate.now().plusDays(1);
