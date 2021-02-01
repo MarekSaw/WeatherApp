@@ -18,9 +18,9 @@ import java.time.LocalDateTime;
 public class WeatherBitServiceImpl implements WeatherService {
   private final static String URI_PATTERN_WEATHER_CITY = "https://api.weatherbit.io/v2.0/forecast/daily?key=%s&city=%s&units=M";
   private final static String URI_PATTERN_WEATHER_COORDINATES = "https://api.weatherbit.io/v2.0/forecast/daily?key=%s&units=M&lat=%f&lon=%f";
-  private final WeatherSource WEATHER_BIT;
-  private final LocalDate TOMORROW;
-  private final LocalDateTime TODAY_MIDNIGHT;
+  private final static WeatherSource WEATHER_BIT = WeatherSource.WEATHER_BIT;
+  private final static LocalDate TOMORROW = LocalDate.now().plusDays(1);
+  private final static LocalDateTime TODAY_MIDNIGHT = LocalDate.now().atStartOfDay();
   private final RestTemplate restTemplate;
   private final ForecastRepository forecastRepository;
 
@@ -29,10 +29,7 @@ public class WeatherBitServiceImpl implements WeatherService {
   private Forecast previousForecast;
   private WeatherForecast weatherForecast;
 
-  public WeatherBitServiceImpl(@Qualifier("WEATHER_BIT") WeatherSource weather_bit, LocalDate tomorrow, LocalDateTime today_midnight, RestTemplate restTemplate, ForecastRepository forecastRepository) {
-    WEATHER_BIT = weather_bit;
-    TOMORROW = tomorrow;
-    TODAY_MIDNIGHT = today_midnight;
+  public WeatherBitServiceImpl(RestTemplate restTemplate, ForecastRepository forecastRepository) {
     this.restTemplate = restTemplate;
     this.forecastRepository = forecastRepository;
   }
@@ -85,7 +82,7 @@ public class WeatherBitServiceImpl implements WeatherService {
     return weatherForecast;
   }
 
-  private WeatherForecast getForecastForDate(String uri, LocalDate date) {
+  protected WeatherForecast getForecastForDate(String uri, LocalDate date) {
     WeatherBitForecast weatherBitForecast = restTemplate.getForObject(uri, WeatherBitForecast.class);
     if (weatherBitForecast != null) {
       return weatherBitForecast.getDailyForecast().stream()

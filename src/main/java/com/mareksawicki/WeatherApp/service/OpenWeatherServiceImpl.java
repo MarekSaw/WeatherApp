@@ -21,9 +21,9 @@ public class OpenWeatherServiceImpl implements WeatherService {
 
   private final static String URI_PATTERN_WEATHER = "https://api.openweathermap.org/data/2.5/weather?q=%s&appid=%s";
   private final static String URI_PATTERN_DAILY = "https://api.openweathermap.org/data/2.5/onecall?lat=%f&lon=%f&exclude=minutely,hourly&units=metric&appid=%s";
-  private final WeatherSource OPEN_WEATHER;
-  private final LocalDate TOMORROW;
-  private final LocalDateTime TODAY_MIDNIGHT;
+  private final static WeatherSource OPEN_WEATHER = WeatherSource.OPEN_WEATHER;
+  private final static LocalDate TOMORROW = LocalDate.now().plusDays(1);
+  private final static LocalDateTime TODAY_MIDNIGHT = LocalDate.now().atStartOfDay();
   private final RestTemplate restTemplate;
   private final ForecastRepository forecastRepository;
 
@@ -32,10 +32,7 @@ public class OpenWeatherServiceImpl implements WeatherService {
   private Forecast previousForecast;
   private WeatherForecast weatherForecast;
 
-  public OpenWeatherServiceImpl(@Qualifier("OPEN_WEATHER") WeatherSource open_weather, LocalDate tomorrow, LocalDateTime today_midnight, RestTemplate restTemplate, ForecastRepository forecastRepository) {
-    OPEN_WEATHER = open_weather;
-    TOMORROW = tomorrow;
-    TODAY_MIDNIGHT = today_midnight;
+  public OpenWeatherServiceImpl(RestTemplate restTemplate, ForecastRepository forecastRepository) {
     this.restTemplate = restTemplate;
     this.forecastRepository = forecastRepository;
   }
@@ -89,7 +86,7 @@ public class OpenWeatherServiceImpl implements WeatherService {
     return weatherForecast;
   }
 
-  private WeatherForecast getForecastForDate(String uri, LocalDate date) {
+  protected WeatherForecast getForecastForDate(String uri, LocalDate date) {
     OpenWeatherForecast openWeatherForecast = restTemplate.getForObject(uri, OpenWeatherForecast.class);
     if (openWeatherForecast != null) {
       return openWeatherForecast.getDailyForecast().stream()
@@ -102,7 +99,7 @@ public class OpenWeatherServiceImpl implements WeatherService {
     }
   }
 
-  private Coordinates getCoordinates(String city) {
+  protected Coordinates getCoordinates(String city) {
     String uri = String.format(URI_PATTERN_WEATHER, city, openWeatherApikey);
     OpenWeatherCoordinates coordinates = restTemplate.getForObject(uri, OpenWeatherCoordinates.class);
     if (coordinates != null) {

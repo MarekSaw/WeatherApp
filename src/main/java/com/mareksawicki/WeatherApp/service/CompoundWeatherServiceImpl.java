@@ -11,11 +11,10 @@ import java.util.stream.Collectors;
 @Service("compoundWeatherService")
 public class CompoundWeatherServiceImpl implements WeatherService {
 
-  private final LocalDate TOMORROW;
+  private final static LocalDate TOMORROW = LocalDate.now().plusDays(1);
   private final List<WeatherService> serviceList;
 
-  public CompoundWeatherServiceImpl(LocalDate tomorrow, @Qualifier("weatherBitService") WeatherService weatherBit, @Qualifier("openWeatherService") WeatherService openWeather) {
-    TOMORROW = tomorrow;
+  public CompoundWeatherServiceImpl(@Qualifier("weatherBitService") WeatherService weatherBit, @Qualifier("openWeatherService") WeatherService openWeather) {
     this.serviceList = List.of(weatherBit, openWeather);
   }
 
@@ -43,7 +42,7 @@ public class CompoundWeatherServiceImpl implements WeatherService {
     .collect(Collectors.toList()));
   }
 
-  private WeatherForecast getAverage(List<WeatherForecast> list) {
+  protected WeatherForecast getAverage(List<WeatherForecast> list) {
     return WeatherForecast.builder()
       .temperature(list.stream().map(WeatherForecast::getTemperature).reduce(0.0, Double::sum) / list.size())
       .pressure(list.stream().map(WeatherForecast::getPressure).reduce(0.0, Double::sum) / list.size())
