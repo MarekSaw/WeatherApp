@@ -13,6 +13,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Service("weatherBitService")
 public class WeatherBitServiceImpl implements WeatherService {
@@ -42,7 +43,7 @@ public class WeatherBitServiceImpl implements WeatherService {
   @Override
   public WeatherForecast getForecast(String city, LocalDate date) {
     previousForecast = forecastRepository.findBySourceAndLocalizationAndForecastDateAndForecastAcquiredDateIsAfter(WEATHER_BIT, city, date, TODAY_MIDNIGHT);
-    if (previousForecast != null) {
+    if (Objects.nonNull(previousForecast)) {
       System.out.println("Returning cached forecast!");
       return previousForecast.getWeatherForecast();
     }
@@ -66,7 +67,7 @@ public class WeatherBitServiceImpl implements WeatherService {
   @Override
   public WeatherForecast getForecast(double lat, double lon, LocalDate date) {
     previousForecast = forecastRepository.findBySourceAndLocalizationAndForecastDateAndForecastAcquiredDateIsAfter(WEATHER_BIT, String.format("%f;%f;", lat, lon), date, TODAY_MIDNIGHT);
-    if (previousForecast != null) {
+    if (Objects.nonNull(previousForecast)) {
       System.out.println("Returning cached forecast!");
       return previousForecast.getWeatherForecast();
     }

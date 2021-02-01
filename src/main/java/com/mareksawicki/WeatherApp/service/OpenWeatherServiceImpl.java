@@ -15,6 +15,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Service("openWeatherService")
 public class OpenWeatherServiceImpl implements WeatherService {
@@ -45,7 +46,7 @@ public class OpenWeatherServiceImpl implements WeatherService {
   @Override
   public WeatherForecast getForecast(String city, LocalDate date) {
     previousForecast = forecastRepository.findBySourceAndLocalizationAndForecastDateAndForecastAcquiredDateIsAfter(OPEN_WEATHER, city, date, TODAY_MIDNIGHT);
-    if (previousForecast != null) {
+    if (Objects.nonNull(previousForecast)) {
       System.out.println("Returning cached forecast!");
       return previousForecast.getWeatherForecast();
     }
@@ -70,7 +71,7 @@ public class OpenWeatherServiceImpl implements WeatherService {
   @Override
   public WeatherForecast getForecast(double lat, double lon, LocalDate date) {
     previousForecast = forecastRepository.findBySourceAndLocalizationAndForecastDateAndForecastAcquiredDateIsAfter(OPEN_WEATHER, String.format("%f;%f;", lat, lon), date, TODAY_MIDNIGHT);
-    if (previousForecast != null) {
+    if (Objects.nonNull(previousForecast)) {
       System.out.println("Returning cached forecast!");
       return previousForecast.getWeatherForecast();
     }
