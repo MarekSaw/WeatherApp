@@ -21,4 +21,8 @@ export class ForecastService {
   public getForecastsCount(): Observable<number> {
     return this.http.get<number>(`${this.url}/count`);
   }
+
+  public deleteForecast(id: number): Observable<any> {
+    return this.http.delete(`${this.url}/${id}`);
+  }
 }

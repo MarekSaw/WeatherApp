@@ -1,4 +1,4 @@
-<div class="container pt-5 pb-5">
+<div class="container pt-5 pb-5" *ngIf="isDataAvailable">
   <table class="table table-hover table-light table-striped align-middle">
     <thead>
     <tr>
@@ -20,9 +20,7 @@
         <button class="btn btn-primary">Show</button>
       </a></td>
       <td>
-        <form>
-          <button type="submit" class="btn btn-danger">Delete</button>
-        </form>
+          <button class="btn btn-danger" (click)="deleteForecast(forecast.id)">Delete</button>
       </td>
 
     </tr>
