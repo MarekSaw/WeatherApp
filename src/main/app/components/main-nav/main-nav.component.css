@@ -1,0 +1,153 @@
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  box-shadow: 0 0 20px 10px black;
+  z-index: 10;
+  position: sticky;
+  top: 0;
+}
+
+.icons-container {
+  display: flex;
+  justify-content: space-around;
+  gap: 30px;
+  margin-left: 10px;
+}
+
+.toggle-button {
+  height: 40px;
+}
+
+.toggle-button:hover {
+  cursor: pointer;
+  background-color: rgba(255,255,255,0.87);
+  box-shadow: 0 0 5px 3px white;
+}
+
+.icon {
+  height: 40px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+.nav-icon {
+  height: 24px;
+  margin-right: 5px;
+}
+
+.nav-buttons-container {
+  display: flex;
+  justify-content: space-around;
+  gap: 30px;
+  margin-right: 20px;
+}
+
+.nav-button {
+  padding: 5px 20px 5px 10px;
+  /*box-shadow: 0 0 5px 3px black;*/
+  border-radius: 5px;
+  text-decoration: none;
+  color: rgb(180,180,180);
+  font-weight: bold;
+}
+
+.nav-button:hover {
+  color: white;
+  /*box-shadow: 0 0 5px 3px white;*/
+}
+
+
+.side-nav {
+  position: sticky;
+  top: 56px;
+}
+
+.side-nav-content {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  width: max-content;
+  height: calc(100vh - 56px);
+  box-shadow: 0 0 10px 8px black;
+  padding-top: 10px;
+}
+
+.side-nav-title {
+  display: flex;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.side-nav-button {
+  display: flex;
+  justify-content: center;
+  margin: 10px;
+  padding: 10px;
+  box-shadow: 0 0 5px 3px black;
+  text-decoration: none;
+  color: rgb(180,180,180);
+  font-weight: bold;
+  border-radius: 20px;
+}
+
+.side-nav-button:hover {
+  color: white;
+  box-shadow: 0 0 5px 3px white;
+}
+
+.footer {
+  position: absolute;
+  width: 100%;
+  padding-top: 20px;
+  display: flex;
+  justify-content: center;
+  align-content: space-between;
+  gap: 5px;
+  flex-direction: column;
+  box-shadow: 0 0 20px 10px black;
+  z-index: 10;
+}
+
+.social-icon-container {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.github {
+  border-radius: 20px !important;
+}
+.social-icon {
+  width: 32px;
+  border-radius: 10px;
+}
+
+.social-icon:hover, .social-icon-github:hover {
+  background-color: white;
+  box-shadow: 0 0 5px 3px white;
+}
+.links-container {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+.footer-link {
+  text-decoration: none;
+  color: rgb(180,180,180);
+  font-size: 18px;
+}
+.copyright {
+  display: flex;
+  justify-content: center;
+  color: rgb(180,180,180);
+
+}
+.copyright a {
+  text-decoration: none;
+  font-weight: bold;
+}
+.copyright a:hover, .footer-link:hover {
+  color: white;
+}
