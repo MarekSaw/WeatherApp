@@ -1,4 +1,4 @@
-export interface WeatherForecast {
+export interface WeatherForecastModel {
   temperature: number;
   pressure: number;
   humidity: number;
