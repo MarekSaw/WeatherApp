@@ -31,6 +31,11 @@ public class WeatherController {
     return ResponseEntity.ok(forecastService.getAllForecasts(page, size));
   }
 
+  @GetMapping("/forecast/count")
+  public ResponseEntity<?> getForecastsCount() {
+    return ResponseEntity.ok(forecastService.getRecordsCount());
+  }
+
   @GetMapping("/weather-forecast")
   public ResponseEntity<?> getWeatherForecast(@RequestParam(required = false) String city,
                                               @RequestParam(required = false) Double lat,

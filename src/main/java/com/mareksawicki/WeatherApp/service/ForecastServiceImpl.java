@@ -44,4 +44,9 @@ public class ForecastServiceImpl implements ForecastService {
     }
     return false;
   }
+
+  @Override
+  public Long getRecordsCount() {
+    return forecastRepository.count();
+  }
 }
