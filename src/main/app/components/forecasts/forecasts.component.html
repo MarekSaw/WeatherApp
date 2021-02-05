@@ -1,0 +1,45 @@
+<div class="container pt-5 pb-5">
+  <table class="table table-hover table-light table-striped align-middle">
+    <thead>
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Location</th>
+      <th scope="col">Date</th>
+      <th scope="col">Acquired date</th>
+      <th scope="col">Weather forecast</th>
+      <th scope="col"></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let forecast of forecastList">
+      <th>{{forecast.id}}</th>
+      <td>{{forecast.localization}}</td>
+      <td>{{forecast.forecastDate}}</td>
+      <td>{{forecast.forecastAcquiredDate}}</td>
+      <td><a>
+        <button class="btn btn-primary">Show</button>
+      </a></td>
+      <td>
+        <form>
+          <button type="submit" class="btn btn-danger">Delete</button>
+        </form>
+      </td>
+
+    </tr>
+    </tbody>
+  </table>
+
+  <nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-center">
+      <li [classList]="actualPage === 1 ? 'page-item disabled' : 'page-item'">
+        <a class="page-link"  tabindex="-1" (click)="getPage(actualPage - 1)">Previous</a>
+      </li>
+      <li [classList]="actualPage === page + 1 ? 'page-item active' : 'page-item'" *ngFor="let page of pageList">
+        <a class="page-link" (click)="getPage(page + 1)">{{page + 1}}</a></li>
+      <li [classList]="actualPage === totalPages ? 'page-item disabled' : 'page-item'">
+        <a class="page-link" (click)="getPage(actualPage + 1)">Next</a>
+      </li>
+    </ul>
+  </nav>
+
+</div>
