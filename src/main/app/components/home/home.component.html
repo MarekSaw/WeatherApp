@@ -1,0 +1,53 @@
+<div class="content">
+    <div class="welcome-container">
+      <h1>Welcome to WeatherApp</h1>
+      <p>Be aware of weather conditions up to date with <strong>WeatherApp</strong>.</p>
+      <p>Check forecast in chosen location for tomorrow.</p>
+      <p>Sign up for more!</p>
+
+
+      <form class="row g-3 mb-3 mt-3 min-vw-50 align-items-center" [formGroup]="firstFormGroup" (ngSubmit)="findWeather()">
+
+        <div class="col" *ngIf="isCity">
+          <div class="form-floating">
+            <input type="text" class="form-control" [formControl]="cityFormControl" id="city" [(ngModel)]="cityName">
+            <label for="city">City name</label>
+            <div class="invalid-tooltip" *ngIf="cityFormControl.hasError('required')">
+              Please enter city's name.
+            </div>
+          </div>
+        </div>
+
+        <div class="col" *ngIf="!isCity">
+        <div class="row mb-3 col" >
+          <div class="form-floating">
+            <input type="number" class="form-control" id="latitude">
+            <label for="latitude">&emsp;Latitude</label>
+          </div>
+        </div>
+        <div class="row col">
+          <div class="form-floating">
+            <input type="number" class="form-control" id="longitude">
+            <label for="longitude">&emsp;Longitude</label>
+          </div>
+        </div>
+        </div>
+
+
+        <div class="col">
+          <div class="form-floating">
+            <select class="select form-select" id="typeSelect">
+              <option value="1">City</option>
+              <option value="2">Location</option>
+            </select>
+            <label for="typeSelect">Check for...</label>
+          </div>
+        </div>
+        <div class="col-sm-2">
+          <button type="submit" class="btn btn-primary">Check</button>
+        </div>
+
+      </form>
+
+    </div>
+</div>
