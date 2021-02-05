@@ -14,10 +14,10 @@ class CompoundWeatherServiceImplTest {
   RestTemplate restTemplate = new RestTemplate();
   ForecastRepository forecastRepository;
 
-  WeatherService weatherBit = new WeatherBitServiceImpl(restTemplate, forecastRepository);
-  WeatherService openWeather = new OpenWeatherServiceImpl(restTemplate, forecastRepository);
+  WeatherService weatherBit = new WeatherBitServiceImpl(restTemplate);
+  WeatherService openWeather = new OpenWeatherServiceImpl(restTemplate);
 
-  CompoundWeatherServiceImpl weatherService = new CompoundWeatherServiceImpl(weatherBit, openWeather);
+  CompoundWeatherServiceImpl weatherService = new CompoundWeatherServiceImpl(weatherBit, openWeather, forecastRepository);
 
   @Test
   void shouldReturnAveragedParameters() {

@@ -26,16 +26,13 @@ public class OpenWeatherServiceImpl implements WeatherService {
   private final static LocalDate TOMORROW = LocalDate.now().plusDays(1);
   private final static LocalDateTime TODAY_MIDNIGHT = LocalDate.now().atStartOfDay();
   private final RestTemplate restTemplate;
-  private final ForecastRepository forecastRepository;
 
   @Value("${openweather.apikey}")
   private String openWeatherApikey;
-  private Forecast previousForecast;
   private WeatherForecast weatherForecast;
 
-  public OpenWeatherServiceImpl(RestTemplate restTemplate, ForecastRepository forecastRepository) {
+  public OpenWeatherServiceImpl(RestTemplate restTemplate) {
     this.restTemplate = restTemplate;
-    this.forecastRepository = forecastRepository;
   }
 
   @Override
@@ -45,21 +42,9 @@ public class OpenWeatherServiceImpl implements WeatherService {
 
   @Override
   public WeatherForecast getForecast(String city, LocalDate date) {
-    previousForecast = forecastRepository.findBySourceAndLocalizationAndForecastDateAndForecastAcquiredDateIsAfter(OPEN_WEATHER, city, date, TODAY_MIDNIGHT);
-    if (Objects.nonNull(previousForecast)) {
-      System.out.println("Returning cached forecast!");
-      return previousForecast.getWeatherForecast();
-    }
     Coordinates coordinates = getCoordinates(city);
     String uri = String.format(URI_PATTERN_DAILY, coordinates.getLatitude(), coordinates.getLongitude(), openWeatherApikey);
     weatherForecast = getForecastForDate(uri, date);
-    forecastRepository.save(Forecast.builder()
-      .weatherForecast(weatherForecast)
-      .source(OPEN_WEATHER)
-      .localization(city)
-      .forecastDate(date)
-      .forecastAcquiredDate(LocalDateTime.now())
-      .build());
     return weatherForecast;
   }
 
@@ -70,20 +55,8 @@ public class OpenWeatherServiceImpl implements WeatherService {
 
   @Override
   public WeatherForecast getForecast(double lat, double lon, LocalDate date) {
-    previousForecast = forecastRepository.findBySourceAndLocalizationAndForecastDateAndForecastAcquiredDateIsAfter(OPEN_WEATHER, String.format("%f;%f;", lat, lon), date, TODAY_MIDNIGHT);
-    if (Objects.nonNull(previousForecast)) {
-      System.out.println("Returning cached forecast!");
-      return previousForecast.getWeatherForecast();
-    }
     String uri = String.format(URI_PATTERN_DAILY, lat, lon, openWeatherApikey);
     weatherForecast = getForecastForDate(uri, date);
-    forecastRepository.save(Forecast.builder()
-      .weatherForecast(weatherForecast)
-      .source(OPEN_WEATHER)
-      .localization(String.format("%f;%f;", lat, lon))
-      .forecastDate(date)
-      .forecastAcquiredDate(LocalDateTime.now())
-      .build());
     return weatherForecast;
   }
 

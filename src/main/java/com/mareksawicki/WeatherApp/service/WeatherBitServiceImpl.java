@@ -23,16 +23,13 @@ public class WeatherBitServiceImpl implements WeatherService {
   private final static LocalDate TOMORROW = LocalDate.now().plusDays(1);
   private final static LocalDateTime TODAY_MIDNIGHT = LocalDate.now().atStartOfDay();
   private final RestTemplate restTemplate;
-  private final ForecastRepository forecastRepository;
 
   @Value("${weatherbit.apikey}")
   private String weatherBitApikey;
-  private Forecast previousForecast;
   private WeatherForecast weatherForecast;
 
-  public WeatherBitServiceImpl(RestTemplate restTemplate, ForecastRepository forecastRepository) {
+  public WeatherBitServiceImpl(RestTemplate restTemplate) {
     this.restTemplate = restTemplate;
-    this.forecastRepository = forecastRepository;
   }
 
   @Override
@@ -42,20 +39,8 @@ public class WeatherBitServiceImpl implements WeatherService {
 
   @Override
   public WeatherForecast getForecast(String city, LocalDate date) {
-    previousForecast = forecastRepository.findBySourceAndLocalizationAndForecastDateAndForecastAcquiredDateIsAfter(WEATHER_BIT, city, date, TODAY_MIDNIGHT);
-    if (Objects.nonNull(previousForecast)) {
-      System.out.println("Returning cached forecast!");
-      return previousForecast.getWeatherForecast();
-    }
     String uri = String.format(URI_PATTERN_WEATHER_CITY, weatherBitApikey, city);
     weatherForecast = getForecastForDate(uri, date);
-    forecastRepository.save(Forecast.builder()
-      .weatherForecast(weatherForecast)
-      .source(WEATHER_BIT)
-      .localization(city)
-      .forecastDate(date)
-      .forecastAcquiredDate(LocalDateTime.now())
-      .build());
     return weatherForecast;
   }
 
@@ -66,20 +51,8 @@ public class WeatherBitServiceImpl implements WeatherService {
 
   @Override
   public WeatherForecast getForecast(double lat, double lon, LocalDate date) {
-    previousForecast = forecastRepository.findBySourceAndLocalizationAndForecastDateAndForecastAcquiredDateIsAfter(WEATHER_BIT, String.format("%f;%f;", lat, lon), date, TODAY_MIDNIGHT);
-    if (Objects.nonNull(previousForecast)) {
-      System.out.println("Returning cached forecast!");
-      return previousForecast.getWeatherForecast();
-    }
     String uri = String.format(URI_PATTERN_WEATHER_COORDINATES, weatherBitApikey, lat, lon).replace(',','.');
     weatherForecast = getForecastForDate(uri, date);
-    forecastRepository.save(Forecast.builder()
-      .weatherForecast(weatherForecast)
-      .source(WEATHER_BIT)
-      .localization(String.format("%f;%f;", lat, lon))
-      .forecastDate(date)
-      .forecastAcquiredDate(LocalDateTime.now())
-      .build());
     return weatherForecast;
   }
 

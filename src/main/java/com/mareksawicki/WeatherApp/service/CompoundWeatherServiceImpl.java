@@ -1,20 +1,29 @@
 package com.mareksawicki.WeatherApp.service;
 
+import com.mareksawicki.WeatherApp.entity.Forecast;
 import com.mareksawicki.WeatherApp.entity.WeatherForecast;
+import com.mareksawicki.WeatherApp.repository.ForecastRepository;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service("compoundWeatherService")
 public class CompoundWeatherServiceImpl implements WeatherService {
 
+  private final static LocalDateTime TODAY_MIDNIGHT = LocalDate.now().atStartOfDay();
   private final static LocalDate TOMORROW = LocalDate.now().plusDays(1);
   private final List<WeatherService> serviceList;
+  private final ForecastRepository forecastRepository;
+  private Forecast previousForecast;
+  private WeatherForecast weatherForecast;
 
-  public CompoundWeatherServiceImpl(@Qualifier("weatherBitService") WeatherService weatherBit, @Qualifier("openWeatherService") WeatherService openWeather) {
+  public CompoundWeatherServiceImpl(@Qualifier("weatherBitService") WeatherService weatherBit, @Qualifier("openWeatherService") WeatherService openWeather, ForecastRepository forecastRepository) {
+    this.forecastRepository = forecastRepository;
     this.serviceList = List.of(weatherBit, openWeather);
   }
 
@@ -25,9 +34,21 @@ public class CompoundWeatherServiceImpl implements WeatherService {
 
   @Override
   public WeatherForecast getForecast(String city, LocalDate date) {
-    return getAverage(serviceList.stream()
+    previousForecast = forecastRepository.findByLocalizationAndForecastDateAndForecastAcquiredDateIsAfter(city, date, TODAY_MIDNIGHT);
+    if (Objects.nonNull(previousForecast)) {
+      System.out.println("Returning cached forecast!");
+      return previousForecast.getWeatherForecast();
+    }
+    weatherForecast = getAverage(serviceList.stream()
       .map(weatherService -> weatherService.getForecast(city, date))
       .collect(Collectors.toList()));
+    forecastRepository.save(Forecast.builder()
+      .weatherForecast(weatherForecast)
+      .localization(city)
+      .forecastDate(date)
+      .forecastAcquiredDate(LocalDateTime.now())
+      .build());
+    return weatherForecast;
   }
 
   @Override
@@ -37,9 +58,21 @@ public class CompoundWeatherServiceImpl implements WeatherService {
 
   @Override
   public WeatherForecast getForecast(double lat, double lon, LocalDate date) {
-    return getAverage(serviceList.stream()
-    .map(weatherService -> weatherService.getForecast(lat, lon, date))
-    .collect(Collectors.toList()));
+    previousForecast = forecastRepository.findByLocalizationAndForecastDateAndForecastAcquiredDateIsAfter(String.format("%f;%f;", lat, lon), date, TODAY_MIDNIGHT);
+    if (Objects.nonNull(previousForecast)) {
+      System.out.println("Returning cached forecast!");
+      return previousForecast.getWeatherForecast();
+    }
+    weatherForecast = getAverage(serviceList.stream()
+      .map(weatherService -> weatherService.getForecast(lat, lon, date))
+      .collect(Collectors.toList()));
+    forecastRepository.save(Forecast.builder()
+      .weatherForecast(weatherForecast)
+      .localization(String.format("%f;%f;", lat, lon))
+      .forecastDate(date)
+      .forecastAcquiredDate(LocalDateTime.now())
+      .build());
+    return weatherForecast;
   }
 
   protected WeatherForecast getAverage(List<WeatherForecast> list) {

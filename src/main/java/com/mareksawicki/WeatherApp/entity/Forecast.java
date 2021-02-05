@@ -1,6 +1,5 @@
 package com.mareksawicki.WeatherApp.entity;
 
-import com.mareksawicki.WeatherApp.enums.WeatherSource;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,7 +21,6 @@ public class Forecast {
   private long id;
   @OneToOne(cascade = CascadeType.ALL)
   private WeatherForecast weatherForecast;
-  private WeatherSource source;
   private String localization;
   private LocalDate forecastDate;
   private LocalDateTime forecastAcquiredDate;
