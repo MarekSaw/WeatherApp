@@ -1,30 +1,22 @@
 package com.mareksawicki.WeatherApp.service;
 
-import com.mareksawicki.WeatherApp.entity.Forecast;
 import com.mareksawicki.WeatherApp.entity.WeatherForecast;
-import com.mareksawicki.WeatherApp.enums.WeatherSource;
 import com.mareksawicki.WeatherApp.exception.ForecastNotFoundException;
 import com.mareksawicki.WeatherApp.model.openweather.Coordinates;
 import com.mareksawicki.WeatherApp.model.openweather.OpenWeatherCoordinates;
 import com.mareksawicki.WeatherApp.model.openweather.OpenWeatherForecast;
-import com.mareksawicki.WeatherApp.repository.ForecastRepository;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Objects;
 
 @Service("openWeatherService")
 public class OpenWeatherServiceImpl implements WeatherService {
 
   private final static String URI_PATTERN_WEATHER = "https://api.openweathermap.org/data/2.5/weather?q=%s&appid=%s";
   private final static String URI_PATTERN_DAILY = "https://api.openweathermap.org/data/2.5/onecall?lat=%f&lon=%f&exclude=minutely,hourly&units=metric&appid=%s";
-  private final static WeatherSource OPEN_WEATHER = WeatherSource.OPEN_WEATHER;
   private final static LocalDate TOMORROW = LocalDate.now().plusDays(1);
-  private final static LocalDateTime TODAY_MIDNIGHT = LocalDate.now().atStartOfDay();
   private final RestTemplate restTemplate;
 
   @Value("${openweather.apikey}")

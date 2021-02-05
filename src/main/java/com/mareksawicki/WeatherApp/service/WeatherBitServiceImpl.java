@@ -1,27 +1,19 @@
 package com.mareksawicki.WeatherApp.service;
 
-import com.mareksawicki.WeatherApp.entity.Forecast;
 import com.mareksawicki.WeatherApp.entity.WeatherForecast;
-import com.mareksawicki.WeatherApp.enums.WeatherSource;
 import com.mareksawicki.WeatherApp.exception.ForecastNotFoundException;
 import com.mareksawicki.WeatherApp.model.weatherbit.WeatherBitForecast;
-import com.mareksawicki.WeatherApp.repository.ForecastRepository;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Objects;
 
 @Service("weatherBitService")
 public class WeatherBitServiceImpl implements WeatherService {
   private final static String URI_PATTERN_WEATHER_CITY = "https://api.weatherbit.io/v2.0/forecast/daily?key=%s&city=%s&units=M";
   private final static String URI_PATTERN_WEATHER_COORDINATES = "https://api.weatherbit.io/v2.0/forecast/daily?key=%s&units=M&lat=%f&lon=%f";
-  private final static WeatherSource WEATHER_BIT = WeatherSource.WEATHER_BIT;
   private final static LocalDate TOMORROW = LocalDate.now().plusDays(1);
-  private final static LocalDateTime TODAY_MIDNIGHT = LocalDate.now().atStartOfDay();
   private final RestTemplate restTemplate;
 
   @Value("${weatherbit.apikey}")
