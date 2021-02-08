@@ -2,7 +2,7 @@
   <nav class="navbar navbar-dark bg-dark bg bg-gradient">
     <div class="icons-container">
       <img class="toggle-button" src="main/assets/icons/home2.png" (click)="toggleNav()">
-      <img class="icon" src="main/assets/icons/weatherApp.png">
+      <img class="icon" src="main/assets/icons/weatherApp.png" [routerLink]="''">
     </div>
     <div class="nav-buttons-container">
       <a href="" class="nav-button"><img class="nav-icon icon" src="main/assets/icons/home.png">Home</a>
@@ -14,11 +14,11 @@
 <div class="side-nav">
   <div class="side-nav-content bg-dark">
     <p class="side-nav-title">WeatherApp</p>
-    <a href="" class="side-nav-button">WeatherApp</a>
-    <a href="" class="side-nav-button">Forecasts</a>
+    <a class="side-nav-button" [routerLink]="''" (click)="toggleNav()">WeatherApp</a>
+    <a class="side-nav-button" [routerLink]="'forecasts'" (click)="toggleNav()">Forecasts</a>
   </div>
 </div>
-  <div>
+  <div class="content">
     <ng-content></ng-content>
   </div>
 
