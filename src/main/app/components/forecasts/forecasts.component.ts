@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {ForecastService} from '../../service/forecast.service';
 import {ForecastModel} from '../model/ForecastModel';
+import {WeatherForecastModel} from '../model/WeatherForecastModel';
 
 @Component({
   selector: 'app-forecasts',
@@ -14,6 +15,9 @@ export class ForecastsComponent implements OnInit {
   totalPages: number;
   pageList: number[];
   isDataAvailable: boolean;
+  weatherLocation = '';
+  weatherParametersModal: WeatherForecastModel = {temperature: 0, pressure: 0, humidity: 0, windSpeed: 0, windDeg: 0};
+
 
   constructor(private forecastService: ForecastService) { }
 
@@ -45,6 +49,15 @@ export class ForecastsComponent implements OnInit {
         }
       });
     });
+  }
+
+  public loadDataToModal(forecast: ForecastModel): void {
+    this.weatherLocation = forecast.localization;
+    for (const key in this.weatherParametersModal) {
+      if (forecast.weatherForecast[key] !== null) {
+        this.weatherParametersModal[key] = forecast.weatherForecast[key];
+      }
+    }
   }
 
   private getPageList(): void {

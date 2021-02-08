@@ -16,13 +16,12 @@
       <td>{{forecast.localization}}</td>
       <td>{{forecast.forecastDate}}</td>
       <td>{{forecast.forecastAcquiredDate}}</td>
-      <td><a>
-        <button class="btn btn-primary">Show</button>
-      </a></td>
       <td>
-          <button class="btn btn-danger" (click)="deleteForecast(forecast.id)">Delete</button>
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#weatherParameters" (click)="loadDataToModal(forecast)">Show</button>
       </td>
-
+      <td>
+        <button class="btn btn-danger" (click)="deleteForecast(forecast.id)">Delete</button>
+      </td>
     </tr>
     </tbody>
   </table>
@@ -30,7 +29,7 @@
   <nav aria-label="Page navigation example">
     <ul class="pagination justify-content-center">
       <li [classList]="actualPage === 1 ? 'page-item disabled' : 'page-item'">
-        <a class="page-link"  tabindex="-1" (click)="getPage(actualPage - 1)">Previous</a>
+        <a class="page-link" tabindex="-1" (click)="getPage(actualPage - 1)">Previous</a>
       </li>
       <li [classList]="actualPage === page + 1 ? 'page-item active' : 'page-item'" *ngFor="let page of pageList">
         <a class="page-link" (click)="getPage(page + 1)">{{page + 1}}</a></li>
@@ -39,5 +38,57 @@
       </li>
     </ul>
   </nav>
+
+  <div class="modal fade" id="weatherParameters" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Weather parameters for <strong>{{weatherLocation}}</strong>:</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <table class="table">
+            <thead>
+            <tr>
+              <th scope="col">Parameter</th>
+              <th scope="col">Value</th>
+              <th scope="col">Unit</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <th scope="row">Temperature</th>
+              <td>{{weatherParametersModal.temperature.toFixed(2)}}</td>
+              <td>&deg;C</td>
+            </tr>
+            <tr>
+              <th scope="row">Pressure</th>
+              <td>{{weatherParametersModal.pressure.toFixed(2)}}</td>
+              <td>hPa</td>
+            </tr>
+            <tr>
+              <th scope="row">Humidity</th>
+              <td>{{weatherParametersModal.humidity.toFixed(0)}}</td>
+              <td>%</td>
+            </tr>
+            <tr>
+              <th scope="row">Wind speed</th>
+              <td>{{(weatherParametersModal.windSpeed * 10 / 36).toFixed(2)}}</td>
+              <td>km/h</td>
+            </tr>
+            <tr>
+              <th scope="row">Wind direction</th>
+              <td>{{weatherParametersModal.windDeg.toFixed(0)}}</td>
+              <td>&deg;</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
 </div>

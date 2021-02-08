@@ -6,11 +6,11 @@
       <p>Sign up for more!</p>
 
 
-      <form class="row g-3 mb-3 mt-3 min-vw-50 align-items-center" [formGroup]="firstFormGroup" (ngSubmit)="findWeather()">
+      <form class="row g-3 mb-3 mt-3 min-vw-50 align-items-center" [formGroup]="firstFormGroup" (ngSubmit)="findWeather(cityFormControl.value)">
 
         <div class="col" *ngIf="isCity">
           <div class="form-floating">
-            <input type="text" class="form-control" [formControl]="cityFormControl" id="city" [(ngModel)]="cityName">
+            <input type="text" class="form-control" [formControl]="cityFormControl" id="city">
             <label for="city">City name</label>
             <div class="invalid-tooltip" *ngIf="cityFormControl.hasError('required')">
               Please enter city's name.
@@ -33,7 +33,6 @@
         </div>
         </div>
 
-
         <div class="col">
           <div class="form-floating">
             <select class="select form-select" id="typeSelect">
@@ -44,10 +43,61 @@
           </div>
         </div>
         <div class="col-sm-2">
-          <button type="submit" class="btn btn-primary">Check</button>
+          <button type="submit" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#weatherParameters">Check</button>
         </div>
-
       </form>
+
+      <div class="modal fade" id="weatherParameters" tabindex="-1">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Weather parameters for <strong>{{weatherLocation}}</strong>:</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                <tr>
+                  <th scope="col">Parameter</th>
+                  <th scope="col">Value</th>
+                  <th scope="col">Unit</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                  <th scope="row">Temperature</th>
+                  <td>{{weatherParametersModal.temperature.toFixed(2)}}</td>
+                  <td>&deg;C</td>
+                </tr>
+                <tr>
+                  <th scope="row">Pressure</th>
+                  <td>{{weatherParametersModal.pressure.toFixed(2)}}</td>
+                  <td>hPa</td>
+                </tr>
+                <tr>
+                  <th scope="row">Humidity</th>
+                  <td>{{weatherParametersModal.humidity.toFixed(0)}}</td>
+                  <td>%</td>
+                </tr>
+                <tr>
+                  <th scope="row">Wind speed</th>
+                  <td>{{(weatherParametersModal.windSpeed * 10 / 36).toFixed(2)}}</td>
+                  <td>km/h</td>
+                </tr>
+                <tr>
+                  <th scope="row">Wind direction</th>
+                  <td>{{weatherParametersModal.windDeg.toFixed(0)}}</td>
+                  <td>&deg;</td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
 
     </div>
 </div>
