@@ -6,7 +6,7 @@
 
 .welcome-container {
   margin-top: 50px;
-  padding: 50px 100px 50px 100px;
+  padding: 50px 100px 35px 100px;
   background-color: rgba(255,255,255,0.7);
   border: grey solid 2px;
   border-radius: 5px;
@@ -28,4 +28,10 @@ input::-webkit-inner-spin-button {
 }
 input[type=number] {
   -moz-appearance: textfield;
+}
+
+.loading-spinner {
+  margin-top: 15px;
+  min-height: 36px;
+  z-index: 100;
 }

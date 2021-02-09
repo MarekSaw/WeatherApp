@@ -1,4 +1,5 @@
 <div class="content">
+  <div class="app-content">
     <div class="welcome-container">
       <h1>Welcome to WeatherApp</h1>
       <p>Be aware of weather conditions up to date with <strong>WeatherApp</strong>.</p>
@@ -6,7 +7,8 @@
       <p>Sign up for more!</p>
 
 
-      <form class="row g-3 mb-3 mt-3 min-vw-50 align-items-center" [formGroup]="firstFormGroup" (ngSubmit)="findWeather(cityFormControl.value)">
+      <form class="row g-3 mb-3 mt-3 min-vw-50 align-items-center" [formGroup]="firstFormGroup"
+            (ngSubmit)="findWeather(cityFormControl.value)">
 
         <div class="col" *ngIf="isCity">
           <div class="form-floating">
@@ -19,18 +21,18 @@
         </div>
 
         <div class="col" *ngIf="!isCity">
-        <div class="row mb-3 col" >
-          <div class="form-floating">
-            <input type="number" class="form-control" id="latitude">
-            <label for="latitude">&emsp;Latitude</label>
+          <div class="row mb-3 col">
+            <div class="form-floating">
+              <input type="number" class="form-control" id="latitude">
+              <label for="latitude">&emsp;Latitude</label>
+            </div>
           </div>
-        </div>
-        <div class="row col">
-          <div class="form-floating">
-            <input type="number" class="form-control" id="longitude">
-            <label for="longitude">&emsp;Longitude</label>
+          <div class="row col">
+            <div class="form-floating">
+              <input type="number" class="form-control" id="longitude">
+              <label for="longitude">&emsp;Longitude</label>
+            </div>
           </div>
-        </div>
         </div>
 
         <div class="col">
@@ -43,15 +45,21 @@
           </div>
         </div>
         <div class="col-sm-2">
-          <button type="submit" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#weatherParameters">Check</button>
+          <button type="submit" class="btn btn-primary">Check</button>
         </div>
       </form>
+
+      <div class="loading-spinner">
+        <div class="spinner-border" role="status" *ngIf="isSpinnerLoadingEnabled">
+        </div>
+      </div>
 
       <div class="modal fade" id="weatherParameters" tabindex="-1">
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLabel">Weather parameters for <strong>{{weatherLocation}}</strong>:</h5>
+              <h5 class="modal-title" id="exampleModalLabel">Weather parameters for <strong>{{weatherLocation}}</strong>:
+              </h5>
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -100,4 +108,5 @@
       </div>
 
     </div>
+  </div>
 </div>

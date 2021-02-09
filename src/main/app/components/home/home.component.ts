@@ -2,7 +2,6 @@ import {Component, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 import {WeatherForecastService} from '../../service/weather-forecast.service';
 import {WeatherForecastModel} from '../model/WeatherForecastModel';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {ForecastModel} from '../model/ForecastModel';
 
 @Component({
   selector: 'app-home',
@@ -14,6 +13,7 @@ export class HomeComponent implements OnInit, OnChanges {
   cityName: string;
   weatherForecast: WeatherForecastModel;
   isCity: boolean;
+  isSpinnerLoadingEnabled: boolean;
   firstFormGroup: FormGroup;
   cityFormControl = new FormControl('', [
     Validators.required,
@@ -27,7 +27,6 @@ export class HomeComponent implements OnInit, OnChanges {
     Validators.required,
     Validators.pattern('^(\\+|-)?(?:180(?:(?:\\.0{1,6})?)|(?:[0-9]|[1-9][0-9]|1[0-7][0-9])(?:(?:\\.[0-9]{1,6})?))$'),
   ]);
-  isDataAvailable: boolean;
   weatherLocation = '';
   weatherParametersModal: WeatherForecastModel = {temperature: 0, pressure: 0, humidity: 0, windSpeed: 0, windDeg: 0};
 
@@ -46,9 +45,11 @@ export class HomeComponent implements OnInit, OnChanges {
   }
 
   public findWeather(location: string): void {
+    this.isSpinnerLoadingEnabled = true;
     this.weatherForecastService.findWeatherForLocation(location).subscribe(value => {
       this.weatherForecast = value;
       this.loadDataToModal(location);
+      ($('#weatherParameters') as any).modal('show');
     });
   }
 
@@ -59,6 +60,7 @@ export class HomeComponent implements OnInit, OnChanges {
         this.weatherParametersModal[key] = this.weatherForecast[key];
       }
     }
+    this.isSpinnerLoadingEnabled = false;
   }
 
 
