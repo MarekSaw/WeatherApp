@@ -28,6 +28,9 @@ public class WeatherController {
   @GetMapping("/forecast")
   public ResponseEntity<?> getAllForecasts(@RequestParam(required = false) Integer page,
                                               @RequestParam(required = false) Integer size) {
+    if (Objects.isNull(page) && Objects.isNull(size)) {
+      return ResponseEntity.ok(forecastService.getAllForecasts());
+    }
     return ResponseEntity.ok(forecastService.getAllForecasts(page, size));
   }
 

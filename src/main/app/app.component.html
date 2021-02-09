@@ -1,6 +1,10 @@
 <div class="example-container">
   <app-main-nav class="navigation">
     <div class="app-content">
+      <div class="loading-spinner" *ngIf="isLoadingSpinnerEnabled">
+        <div class="spinner-border" role="status">
+        </div>
+      </div>
     <router-outlet></router-outlet>
     </div>
   </app-main-nav>

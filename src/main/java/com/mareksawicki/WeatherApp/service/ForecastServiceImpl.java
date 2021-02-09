@@ -21,6 +21,11 @@ public class ForecastServiceImpl implements ForecastService {
   }
 
   @Override
+  public List<Forecast> getAllForecasts() {
+    return forecastRepository.findAll();
+  }
+
+  @Override
   public List<Forecast> getAllForecasts(Integer page, Integer size) {
     if (!Objects.nonNull(page)) {
       page = 1;

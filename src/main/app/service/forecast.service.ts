@@ -14,8 +14,12 @@ export class ForecastService {
     this.url = 'http://localhost:8080/weather-api/forecast';
   }
 
-  public getAllForecasts(page: number): Observable<ForecastModel[]> {
+  public getAllForecastsPagination(page: number): Observable<ForecastModel[]> {
     return this.http.get<ForecastModel[]>(`${this.url}?page=${page}`);
+  }
+
+  public getAllForecasts(): Observable<ForecastModel[]> {
+    return this.http.get<ForecastModel[]>(`${this.url}`);
   }
 
   public getForecastsCount(): Observable<number> {
