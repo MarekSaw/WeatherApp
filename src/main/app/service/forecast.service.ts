@@ -27,6 +27,6 @@ export class ForecastService {
   }
 
   public deleteForecast(id: number): Observable<any> {
-    return this.http.delete(`${this.url}/${id}`);
+    return this.http.delete<any>(`${this.url}/${id}`);
   }
 }
