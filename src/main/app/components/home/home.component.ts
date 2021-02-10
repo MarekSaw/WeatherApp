@@ -1,4 +1,4 @@
-import {Component, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {WeatherForecastService} from '../../service/weather-forecast.service';
 import {WeatherForecastModel} from '../model/WeatherForecastModel';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
@@ -8,7 +8,7 @@ import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
-export class HomeComponent implements OnInit, OnChanges {
+export class HomeComponent implements OnInit {
 
   cityName: string;
   weatherForecast: WeatherForecastModel;
@@ -36,35 +36,38 @@ export class HomeComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
     $('.select').on('change', () => {
-      // works only for double =. doesnt work for triple =.
-      this.isCity = $('.select').val() == 1;
+      this.isCity = !this.isCity;
     });
     this.firstFormGroup = this.formBuilder.group({
       firstCtrl: ['', Validators.required]
     });
   }
 
-  public findWeather(location: string): void {
+  public findWeather(location: string, latitude: number, longitude: number): void {
     this.isSpinnerLoadingEnabled = true;
-    this.weatherForecastService.findWeatherForLocation(location).subscribe(value => {
-      this.weatherForecast = value;
-      this.loadDataToModal(location);
-      ($('#weatherParameters') as any).modal('show');
-    });
+    if (this.isCity) {
+      this.weatherLocation = location;
+      this.weatherForecastService.findWeatherForCity(location).subscribe(value => {
+        this.weatherForecast = value;
+        this.loadDataToModal();
+        ($('#weatherParameters') as any).modal('show');
+      });
+    } else {
+      this.weatherLocation = `lat: ${latitude.toFixed(3)}, lon: ${longitude.toFixed(3)}`;
+      this.weatherForecastService.findWeatherForCoordinates(latitude, longitude).subscribe(value => {
+        this.weatherForecast = value;
+        this.loadDataToModal();
+        ($('#weatherParameters') as any).modal('show');
+      });
+    }
   }
 
-  public loadDataToModal(location: string): void {
-    this.weatherLocation = location;
+  public loadDataToModal(): void {
     for (const key in this.weatherParametersModal) {
       if (this.weatherForecast[key] !== null) {
         this.weatherParametersModal[key] = this.weatherForecast[key];
       }
     }
     this.isSpinnerLoadingEnabled = false;
-  }
-
-
-  ngOnChanges(changes: SimpleChanges): void {
-
   }
 }

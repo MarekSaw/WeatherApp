@@ -14,7 +14,11 @@ export class WeatherForecastService {
     this.url = 'http://localhost:8080/weather-api/weather-forecast';
   }
 
-  public findWeatherForLocation(city: string): Observable<WeatherForecastModel> {
+  public findWeatherForCity(city: string): Observable<WeatherForecastModel> {
     return this.http.get<WeatherForecastModel>(`${this.url}?city=${city}`);
+  }
+
+  public findWeatherForCoordinates(latitude: number, longitude: number): Observable<WeatherForecastModel> {
+    return this.http.get<WeatherForecastModel>(`${this.url}?lat=${latitude}&lon=${longitude}`);
   }
 }

@@ -8,14 +8,15 @@
 
 
       <form class="row g-3 mb-3 mt-3 min-vw-50 align-items-center" [formGroup]="firstFormGroup"
-            (ngSubmit)="findWeather(cityFormControl.value)">
+            (ngSubmit)="findWeather(cityFormControl.value, latitudeFormControl.value, longitudeFormControl.value)">
 
         <div class="col" *ngIf="isCity">
           <div class="form-floating">
-            <input type="text" class="form-control" [formControl]="cityFormControl" id="city">
+            <input type="text" class="form-control" id="city" [formControl]="cityFormControl"
+            [classList]="cityFormControl.hasError('pattern') ? 'form-control is-invalid' : 'form-control'">
             <label for="city">City name</label>
-            <div class="invalid-tooltip" *ngIf="cityFormControl.hasError('required')">
-              Please enter city's name.
+            <div class="invalid-tooltip">
+              Please enter valid city's name.
             </div>
           </div>
         </div>
@@ -23,14 +24,22 @@
         <div class="col" *ngIf="!isCity">
           <div class="row mb-3 col">
             <div class="form-floating">
-              <input type="number" class="form-control" id="latitude">
+              <input type="number" class="form-control" id="latitude" [formControl]="latitudeFormControl"
+                     [classList]="latitudeFormControl.hasError('pattern') ? 'form-control is-invalid' : 'form-control'">
               <label for="latitude">&emsp;Latitude</label>
+              <div class="invalid-tooltip">
+                Value should be in range (-90 : 90) with max 6 decimal digits.
+              </div>
             </div>
           </div>
           <div class="row col">
             <div class="form-floating">
-              <input type="number" class="form-control" id="longitude">
+              <input type="number" class="form-control" id="longitude" [formControl]="longitudeFormControl"
+                     [classList]="longitudeFormControl.hasError('pattern') ? 'form-control is-invalid' : 'form-control'">
               <label for="longitude">&emsp;Longitude</label>
+              <div class="invalid-tooltip">
+                Value should be in range (-180 : 180) with max 6 decimal digits.
+              </div>
             </div>
           </div>
         </div>
@@ -45,7 +54,11 @@
           </div>
         </div>
         <div class="col-sm-2">
-          <button type="submit" class="btn btn-primary">Check</button>
+          <button type="submit" class="btn btn-primary"
+                  [disabled]="(cityFormControl.hasError('required') || cityFormControl.hasError('pattern')) &&
+                  ((latitudeFormControl.hasError('required') || latitudeFormControl.hasError('pattern')) ||
+                  (longitudeFormControl.hasError('required') || longitudeFormControl.hasError('pattern')))">
+            Check</button>
         </div>
       </form>
 
