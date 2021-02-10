@@ -63,7 +63,6 @@ export class ForecastsComponent implements OnInit {
   }
 
   public loadDataToModal(forecast: ForecastModel): void {
-    this.isSpinnerDeletingEnabled = true;
     this.weatherLocation = forecast.localization;
     for (const key in this.weatherParametersModal) {
       if (forecast.weatherForecast[key] !== null) {
