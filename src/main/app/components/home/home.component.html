@@ -55,9 +55,7 @@
         </div>
         <div class="col-sm-2">
           <button type="submit" class="btn btn-primary"
-                  [disabled]="(cityFormControl.hasError('required') || cityFormControl.hasError('pattern')) &&
-                  ((latitudeFormControl.hasError('required') || latitudeFormControl.hasError('pattern')) ||
-                  (longitudeFormControl.hasError('required') || longitudeFormControl.hasError('pattern')))">
+                  [disabled]="!cityFormControl.valid && isCity || !(latitudeFormControl.valid && longitudeFormControl.valid) && !isCity">
             Check</button>
         </div>
       </form>
