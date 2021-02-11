@@ -21,4 +21,12 @@ export class WeatherForecastService {
   public findWeatherForCoordinates(latitude: number, longitude: number): Observable<WeatherForecastModel> {
     return this.http.get<WeatherForecastModel>(`${this.url}?lat=${latitude}&lon=${longitude}`);
   }
+
+  public findWeatherForCityWithDate(city: string, date: string): Observable<WeatherForecastModel> {
+    return this.http.get<WeatherForecastModel>(`${this.url}?city=${city}&date=${date}`);
+  }
+
+  public findWeatherForCoordinatesWithDate(latitude: number, longitude: number, date: string): Observable<WeatherForecastModel> {
+    return this.http.get<WeatherForecastModel>(`${this.url}?lat=${latitude}&lon=${longitude}&date=${date}`);
+  }
 }

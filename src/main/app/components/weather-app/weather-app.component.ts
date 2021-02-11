@@ -40,7 +40,7 @@ export class WeatherAppComponent implements OnInit {
   constructor(private formBuilder: FormBuilder, private weatherForecastService: WeatherForecastService) {
     this.isCity = true;
     this.tomorrow = new Date(new Date().setDate(new Date(Date.now()).getDate() + 1));
-    this.eightDaysForward = new Date(new Date().setDate(new Date(Date.now()).getDate() + 8));
+    this.eightDaysForward = new Date(new Date().setDate(new Date(Date.now()).getDate() + 7));
     this.minDate = this.toInputDateString(this.tomorrow);
     this.maxDate = this.toInputDateString(this.eightDaysForward);
     this.dateFormControl = new FormControl(this.minDate, [
@@ -57,18 +57,18 @@ export class WeatherAppComponent implements OnInit {
     });
   }
 
-  public findWeather(location: string, latitude: number, longitude: number): void {
+  public findWeather(location: string, latitude: number, longitude: number, date: string): void {
     this.isSpinnerLoadingEnabled = true;
     if (this.isCity) {
       this.weatherLocation = location;
-      this.weatherForecastService.findWeatherForCity(location).subscribe(value => {
+      this.weatherForecastService.findWeatherForCityWithDate(location, date).subscribe(value => {
         this.weatherForecast = value;
         this.loadDataToModal();
         ($('#weatherParameters') as any).modal('show');
       });
     } else {
       this.weatherLocation = `lat: ${latitude.toFixed(3)}, lon: ${longitude.toFixed(3)}`;
-      this.weatherForecastService.findWeatherForCoordinates(latitude, longitude).subscribe(value => {
+      this.weatherForecastService.findWeatherForCoordinatesWithDate(latitude, longitude, date).subscribe(value => {
         this.weatherForecast = value;
         this.loadDataToModal();
         ($('#weatherParameters') as any).modal('show');
@@ -78,7 +78,7 @@ export class WeatherAppComponent implements OnInit {
 
   public isDateValid(): boolean {
     return Date.parse(this.dateFormControl.value) > new Date().setDate(new Date(Date.now()).getDate())
-      && Date.parse(this.dateFormControl.value) < new Date().setDate(new Date(Date.now()).getDate() + 8);
+      && Date.parse(this.dateFormControl.value) < new Date().setDate(new Date(Date.now()).getDate() + 7);
   }
 
   public loadDataToModal(): void {

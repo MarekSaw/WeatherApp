@@ -30,7 +30,7 @@
         </div>
         <div class="bs-stepper-content">
           <form [formGroup]="firstFormGroup"
-                (ngSubmit)="findWeather(cityFormControl.value, latitudeFormControl.value, longitudeFormControl.value)">
+                (ngSubmit)="findWeather(cityFormControl.value, latitudeFormControl.value, longitudeFormControl.value, dateFormControl.value)">
 
             <!--STEP 1.-->
 
@@ -123,7 +123,6 @@
               </button>
             </div>
 
-
           </form>
         </div>
       </div>
@@ -134,7 +133,7 @@
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLabel">Weather parameters for <strong>{{weatherLocation}}</strong>:
+              <h5 class="modal-title" id="exampleModalLabel">Weather forecast for <strong>{{weatherLocation}}</strong> on day of <strong>{{dateFormControl.value}}</strong>:
               </h5>
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
