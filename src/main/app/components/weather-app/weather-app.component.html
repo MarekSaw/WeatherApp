@@ -1,0 +1,188 @@
+<div class="content">
+  <div class="app-content">
+    <div class="welcome-container">
+
+
+      <div id="stepper" class="bs-stepper vertical linear">
+        <div class="bs-stepper-header" role="tablist">
+          <div class="step active" id="steph1" data-target="#step1">
+            <button type="button" class="step-trigger" role="tab" (click)="goToStep(1)">
+              <span class="bs-stepper-circle">1</span>
+              <span class="bs-stepper-label">Localization</span>
+            </button>
+          </div>
+          <div class="bs-stepper-line"></div>
+          <div class="step" id="steph2" data-target="#step2">
+            <button type="button" class="step-trigger" role="tab" (click)="goToStep(2)"
+                    [disabled]="!cityFormControl.valid && isCity || !(latitudeFormControl.valid && longitudeFormControl.valid) && !isCity">
+              <span class="bs-stepper-circle">2</span>
+              <span class="bs-stepper-label">Date</span>
+            </button>
+          </div>
+          <div class="bs-stepper-line"></div>
+          <div class="step" id="steph3" data-target="#step3">
+            <button type="button" class="step-trigger" role="tab" (click)="goToStep(3)"
+                    [disabled]="!cityFormControl.valid && isCity || !(latitudeFormControl.valid && longitudeFormControl.valid) && !isCity || !dateFormControl.valid">
+              <span class="bs-stepper-circle">3</span>
+              <span class="bs-stepper-label">Forecast</span>
+            </button>
+          </div>
+        </div>
+        <div class="bs-stepper-content">
+          <form [formGroup]="firstFormGroup"
+                (ngSubmit)="findWeather(cityFormControl.value, latitudeFormControl.value, longitudeFormControl.value)">
+
+            <!--STEP 1.-->
+
+            <div id="step1" role="tabpanel" class="bs-stepper-pane fade dstepper-block active">
+              <div class="form-group">
+                <p>Chose type of given localization you looking forecast for by city or coordinates.</p>
+                <form class="row g-3 mb-3 mt-3 min-vw-50 align-items-center">
+                  <div class="col" *ngIf="isCity">
+                    <div class="form-floating">
+                      <input type="text" class="form-control" id="city" [formControl]="cityFormControl"
+                             [classList]="cityFormControl.hasError('pattern') ? 'form-control is-invalid' : 'form-control'">
+                      <label for="city">City name</label>
+                      <div class="invalid-tooltip">
+                        Please enter valid city's name.
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col" *ngIf="!isCity">
+                    <div class="row mb-3 col">
+                      <div class="form-floating">
+                        <input type="number" class="form-control" id="latitude" [formControl]="latitudeFormControl"
+                               [classList]="latitudeFormControl.hasError('pattern') ? 'form-control is-invalid' : 'form-control'">
+                        <label for="latitude">&emsp;Latitude</label>
+                        <div class="invalid-tooltip">
+                          Value should be in range (-90 : 90) with max 6 decimal digits.
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row col">
+                      <div class="form-floating">
+                        <input type="number" class="form-control" id="longitude" [formControl]="longitudeFormControl"
+                               [classList]="longitudeFormControl.hasError('pattern') ? 'form-control is-invalid' : 'form-control'">
+                        <label for="longitude">&emsp;Longitude</label>
+                        <div class="invalid-tooltip">
+                          Value should be in range (-180 : 180) with max 6 decimal digits.
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col">
+                    <div class="form-floating">
+                      <select class="select form-select" id="typeSelect">
+                        <option value="1">City</option>
+                        <option value="2">Location</option>
+                      </select>
+                      <label for="typeSelect">Check for...</label>
+                    </div>
+                  </div>
+                </form>
+              </div>
+              <button type="button" class="btn btn-primary" (click)="goToStep(2)"
+                      [disabled]="!cityFormControl.valid && isCity || !(latitudeFormControl.valid && longitudeFormControl.valid) && !isCity">
+                Next
+              </button>
+            </div>
+
+            <!--STEP 2.-->
+
+            <div id="step2" role="tabpanel" class="bs-stepper-pane fade dstepper-block">
+              <div class="form-group">
+                <p>Pick available date.</p>
+                <form class="row g-3 mb-3 mt-3 min-vw-50 align-items-center">
+                  <div class="row col">
+                    <div class="form-floating">
+                      <input type="date" class="form-control" id="date" [formControl]="dateFormControl"
+                             [classList]="isDateValid() ? 'form-control' : 'form-control  is-invalid'"
+                             [min]="minDate"
+                             [max]="maxDate">
+                      <label for="date">&emsp;Date</label>
+                      <div class="invalid-tooltip">
+                        Date is not available.
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+              <button type="button" class="btn btn-primary" (click)="goToStep(3)"
+                      [disabled]="!dateFormControl.valid || !isDateValid()">Next
+              </button>
+            </div>
+
+            <!--STEP 3.-->
+
+            <div id="step3" role="tabpanel" class="bs-stepper-pane fade dstepper-block justify-content-center">
+              <p>Ready to check.</p>
+              <button type="submit" class="btn btn-primary">
+                <span class="spinner-border spinner-border-sm" role="status" *ngIf="isSpinnerLoadingEnabled">
+                </span>
+                Check
+              </button>
+            </div>
+
+
+          </form>
+        </div>
+      </div>
+
+      <!--MODAL-->
+
+      <div class="modal fade" id="weatherParameters" tabindex="-1">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Weather parameters for <strong>{{weatherLocation}}</strong>:
+              </h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                <tr>
+                  <th scope="col">Parameter</th>
+                  <th scope="col">Value</th>
+                  <th scope="col">Unit</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                  <th scope="row">Temperature</th>
+                  <td>{{weatherParametersModal.temperature.toFixed(2)}}</td>
+                  <td>&deg;C</td>
+                </tr>
+                <tr>
+                  <th scope="row">Pressure</th>
+                  <td>{{weatherParametersModal.pressure.toFixed(2)}}</td>
+                  <td>hPa</td>
+                </tr>
+                <tr>
+                  <th scope="row">Humidity</th>
+                  <td>{{weatherParametersModal.humidity.toFixed(0)}}</td>
+                  <td>%</td>
+                </tr>
+                <tr>
+                  <th scope="row">Wind speed</th>
+                  <td>{{(weatherParametersModal.windSpeed * 10 / 36).toFixed(2)}}</td>
+                  <td>km/h</td>
+                </tr>
+                <tr>
+                  <th scope="row">Wind direction</th>
+                  <td>{{weatherParametersModal.windDeg.toFixed(0)}}</td>
+                  <td>&deg;</td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
