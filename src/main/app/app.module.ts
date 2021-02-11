@@ -8,13 +8,15 @@ import { HomeComponent } from './components/home/home.component';
 import {HttpClientModule} from '@angular/common/http';
 import {ReactiveFormsModule} from '@angular/forms';
 import { ForecastsComponent } from './components/forecasts/forecasts.component';
+import { WeatherAppComponent } from './components/weather-app/weather-app.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     MainNavComponent,
     HomeComponent,
-    ForecastsComponent
+    ForecastsComponent,
+    WeatherAppComponent
   ],
   imports: [
     BrowserModule,
