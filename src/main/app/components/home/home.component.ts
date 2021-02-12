@@ -47,18 +47,28 @@ export class HomeComponent implements OnInit {
     this.isSpinnerLoadingEnabled = true;
     if (this.isCity) {
       this.weatherLocation = location;
-      this.weatherForecastService.findWeatherForCity(location).subscribe(value => {
-        this.weatherForecast = value;
-        this.loadDataToModal();
-        ($('#weatherParameters') as any).modal('show');
-      });
+      this.weatherForecastService.findWeatherForCity(location).subscribe(
+        value => {
+          this.weatherForecast = value;
+          this.loadDataToModal();
+          ($('#weatherParameters') as any).modal('show');
+        },
+        error => {
+          this.isSpinnerLoadingEnabled = false;
+          ($('#errorModal') as any).modal('show');
+        });
     } else {
       this.weatherLocation = `lat: ${latitude.toFixed(3)}, lon: ${longitude.toFixed(3)}`;
-      this.weatherForecastService.findWeatherForCoordinates(latitude, longitude).subscribe(value => {
-        this.weatherForecast = value;
-        this.loadDataToModal();
-        ($('#weatherParameters') as any).modal('show');
-      });
+      this.weatherForecastService.findWeatherForCoordinates(latitude, longitude).subscribe(
+        value => {
+          this.weatherForecast = value;
+          this.loadDataToModal();
+          ($('#weatherParameters') as any).modal('show');
+        },
+        error => {
+          this.isSpinnerLoadingEnabled = false;
+          ($('#errorModal') as any).modal('show');
+        });
     }
   }
 
