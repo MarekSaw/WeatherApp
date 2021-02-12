@@ -15,7 +15,7 @@ export class WeatherAppComponent implements OnInit {
   isCity: boolean;
   isSpinnerLoadingEnabled: boolean;
 
-  firstFormGroup: FormGroup;
+  formGroup: FormGroup;
   cityFormControl = new FormControl('', [
     Validators.required,
     Validators.pattern('[a-zA-Z ]*'),
@@ -46,14 +46,14 @@ export class WeatherAppComponent implements OnInit {
     this.dateFormControl = new FormControl(this.minDate, [
       Validators.required,
     ]);
+    this.formGroup = this.formBuilder.group({
+      firstCtrl: ['', Validators.required]
+    });
   }
 
   ngOnInit(): void {
     $('.select').on('change', () => {
       this.changeLocalizationType();
-    });
-    this.firstFormGroup = this.formBuilder.group({
-      firstCtrl: ['', Validators.required]
     });
   }
 
@@ -61,18 +61,28 @@ export class WeatherAppComponent implements OnInit {
     this.isSpinnerLoadingEnabled = true;
     if (this.isCity) {
       this.weatherLocation = location;
-      this.weatherForecastService.findWeatherForCityWithDate(location, date).subscribe(value => {
-        this.weatherForecast = value;
-        this.loadDataToModal();
-        ($('#weatherParameters') as any).modal('show');
-      });
+      this.weatherForecastService.findWeatherForCityWithDate(location, date).subscribe(
+        value => {
+          this.weatherForecast = value;
+          this.loadDataToModal();
+          ($('#weatherParameters') as any).modal('show');
+        },
+        error => {
+          this.isSpinnerLoadingEnabled = false;
+          ($('#errorModal') as any).modal('show');
+        });
     } else {
       this.weatherLocation = `lat: ${latitude.toFixed(3)}, lon: ${longitude.toFixed(3)}`;
-      this.weatherForecastService.findWeatherForCoordinatesWithDate(latitude, longitude, date).subscribe(value => {
-        this.weatherForecast = value;
-        this.loadDataToModal();
-        ($('#weatherParameters') as any).modal('show');
-      });
+      this.weatherForecastService.findWeatherForCoordinatesWithDate(latitude, longitude, date).subscribe(
+        value => {
+          this.weatherForecast = value;
+          this.loadDataToModal();
+          ($('#weatherParameters') as any).modal('show');
+        },
+        error => {
+          this.isSpinnerLoadingEnabled = false;
+          ($('#errorModal') as any).modal('show');
+        });
     }
   }
 

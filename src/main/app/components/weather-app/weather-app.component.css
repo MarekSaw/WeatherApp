@@ -35,3 +35,8 @@ input[type=number] {
   min-height: 36px;
   z-index: 100;
 }
+
+.modal-body p, .modal-body h5 {
+  text-align: center;
+  font-size: 18px;
+}

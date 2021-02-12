@@ -32,14 +32,14 @@ export class HomeComponent implements OnInit {
 
   constructor(private formBuilder: FormBuilder, private weatherForecastService: WeatherForecastService) {
     this.isCity = true;
+    this.firstFormGroup = this.formBuilder.group({
+      firstCtrl: ['', Validators.required]
+    });
   }
 
   ngOnInit(): void {
     $('.select').on('change', () => {
       this.isCity = !this.isCity;
-    });
-    this.firstFormGroup = this.formBuilder.group({
-      firstCtrl: ['', Validators.required]
     });
   }
 
