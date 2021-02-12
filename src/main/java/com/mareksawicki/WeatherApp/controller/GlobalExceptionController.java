@@ -10,13 +10,13 @@ import org.springframework.web.client.HttpClientErrorException;
 @RestControllerAdvice
 public class GlobalExceptionController {
 
-  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  @ResponseStatus(HttpStatus.NOT_FOUND)
   @ExceptionHandler(ForecastNotFoundException.class)
   public Error forecastNotFoundExceptionHandler(ForecastNotFoundException forecastNotFoundException) {
     return new Error(forecastNotFoundException.getMessage());
   }
 
-  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  @ResponseStatus(HttpStatus.NOT_FOUND)
   @ExceptionHandler(HttpClientErrorException.class)
   public Error httpClientErrorExceptionHandler(HttpClientErrorException httpClientErrorException) {
     return new Error(httpClientErrorException.getMessage());
