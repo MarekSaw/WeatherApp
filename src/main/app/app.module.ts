@@ -5,10 +5,11 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { MainNavComponent } from './components/main-nav/main-nav.component';
 import { HomeComponent } from './components/home/home.component';
-import {HttpClientModule} from '@angular/common/http';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {ReactiveFormsModule} from '@angular/forms';
 import { ForecastsComponent } from './components/forecasts/forecasts.component';
 import { WeatherAppComponent } from './components/weather-app/weather-app.component';
+import {GlobalHttpInterceptorService} from './service/global-http-interceptor.service';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,9 @@ import { WeatherAppComponent } from './components/weather-app/weather-app.compon
     HttpClientModule,
     ReactiveFormsModule
   ],
-  providers: [],
+  providers: [
+    {provide: HTTP_INTERCEPTORS, useClass: GlobalHttpInterceptorService, multi: true}
+    ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
