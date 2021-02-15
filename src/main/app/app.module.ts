@@ -10,6 +10,7 @@ import {ReactiveFormsModule} from '@angular/forms';
 import { ForecastsComponent } from './components/forecasts/forecasts.component';
 import { WeatherAppComponent } from './components/weather-app/weather-app.component';
 import {GlobalHttpInterceptorService} from './service/global-http-interceptor.service';
+import { ContactComponent } from './components/contact/contact.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import {GlobalHttpInterceptorService} from './service/global-http-interceptor.se
     MainNavComponent,
     HomeComponent,
     ForecastsComponent,
-    WeatherAppComponent
+    WeatherAppComponent,
+    ContactComponent
   ],
   imports: [
     BrowserModule,
