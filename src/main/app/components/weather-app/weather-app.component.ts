@@ -32,17 +32,17 @@ export class WeatherAppComponent implements OnInit {
 
   weatherLocation = '';
   weatherParametersModal: WeatherForecastModel = {temperature: 0, pressure: 0, humidity: 0, windSpeed: 0, windDeg: 0};
-  tomorrow: Date;
-  eightDaysForward: Date;
+  today: Date;
+  sevenDaysForward: Date;
   minDate: string;
   maxDate: string;
 
   constructor(private formBuilder: FormBuilder, private weatherForecastService: WeatherForecastService) {
     this.isCity = true;
-    this.tomorrow = new Date(new Date().setDate(new Date(Date.now()).getDate() + 1));
-    this.eightDaysForward = new Date(new Date().setDate(new Date(Date.now()).getDate() + 7));
-    this.minDate = this.toInputDateString(this.tomorrow);
-    this.maxDate = this.toInputDateString(this.eightDaysForward);
+    this.today = new Date(new Date().setDate(new Date(Date.now()).getDate()));
+    this.sevenDaysForward = new Date(new Date().setDate(new Date(Date.now()).getDate() + 7));
+    this.minDate = this.toInputDateString(this.today);
+    this.maxDate = this.toInputDateString(this.sevenDaysForward);
     this.dateFormControl = new FormControl(this.minDate, [
       Validators.required,
     ]);
@@ -87,7 +87,7 @@ export class WeatherAppComponent implements OnInit {
   }
 
   public isDateValid(): boolean {
-    return Date.parse(this.dateFormControl.value) > new Date().setDate(new Date(Date.now()).getDate())
+    return Date.parse(this.dateFormControl.value) > new Date().setDate(new Date(Date.now()).getDate() - 1)
       && Date.parse(this.dateFormControl.value) < new Date().setDate(new Date(Date.now()).getDate() + 7);
   }
 
