@@ -5,7 +5,7 @@
       <img class="icon" src="main/assets/icons/weatherApp.png" [routerLink]="''">
     </div>
     <div class="nav-buttons-container">
-      <a href="" class="nav-button"><img class="nav-icon icon" src="main/assets/icons/home.png">Home</a>
+      <a [routerLink]="'home'" class="nav-button"><img class="nav-icon icon" src="main/assets/icons/home.png">Home</a>
       <a href="" class="nav-button"><img class="nav-icon icon" src="main/assets/icons/login.png">Login</a>
       <a href="" class="nav-button"><img class="nav-icon icon" src="main/assets/icons/register.png">Register</a>
 
@@ -28,8 +28,8 @@
       <a href="https://www.linkedin.com/in/marek-sawicki-a988951b9" target="_blank"><img class="social-icon" src="main/assets/icons/linkedin.png" alt="LinkedIn"></a>
     </div>
     <div class="links-container">
-      <a href="" class="footer-link">Home</a>
-      <a href="" class="footer-link">About</a>
+      <a [routerLink]="'home'" class="footer-link">Home</a>
+      <a [routerLink]="'about'" class="footer-link">About</a>
       <a [routerLink]="'contact'" class="footer-link">Contact</a>
     </div>
     <p class="copyright">Copyright @2021 | Created by&nbsp;<a href="https://github.com/MarekSaw" target="_blank">Marek Sawicki</a></p>

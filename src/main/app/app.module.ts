@@ -11,6 +11,7 @@ import { ForecastsComponent } from './components/forecasts/forecasts.component';
 import { WeatherAppComponent } from './components/weather-app/weather-app.component';
 import {GlobalHttpInterceptorService} from './service/global-http-interceptor.service';
 import { ContactComponent } from './components/contact/contact.component';
+import { AboutComponent } from './components/about/about.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { ContactComponent } from './components/contact/contact.component';
     HomeComponent,
     ForecastsComponent,
     WeatherAppComponent,
-    ContactComponent
+    ContactComponent,
+    AboutComponent
   ],
   imports: [
     BrowserModule,

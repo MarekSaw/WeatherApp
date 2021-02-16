@@ -1,0 +1,101 @@
+<div class="content">
+  <div class="app-content">
+    <div class="container">
+
+      <h1 class="mb-5">WeatherApp</h1>
+
+      <p>WeatherApp is an Angular + Spring application remade from <a
+        href="https://github.com/MarekSaw/WeatherAppHibernate" target="_blank">Hibernate version</a> of it.</p>
+      <p>App serve for weather forecast checking in any location given by city name or latitude and longitude
+        coordinates.</p>
+      <p>It gives access to 7 days forward forecast and searching history for logged in users</p>
+
+
+      <div class="segment-container mt-4">
+        <h4>Weather APIs</h4>
+        <ul class="list-unstyled">
+          <li>Application uses weather apis listed below:
+            <ul>
+              <li><a href="https://www.weatherbit.io/">Weatherbit API</a></li>
+              <li><a href="https://openweathermap.org/">OpenWeather API</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+
+      <div class="segment-container">
+        <h4>Input data</h4>
+        <p>Standard functionality lets user check tomorrows forecast for given location by:</p>
+        <ul>
+          <li>name of city,</li>
+          <li>latitude and longitude coordinates values.</li>
+        </ul>
+        <p>Signed in users are capable of checking forecast for 7 days forward by picking a date with datepicker.</p>
+      </div>
+
+      <div class="segment-container">
+        <h4>Output data</h4>
+        <p>App responses with parameters below:</p>
+        <ul>
+          <li>temperature (Celsius degree),</li>
+          <li>pressure (hPa),</li>
+          <li>humidity (%),</li>
+          <li>wind speed (m/s),</li>
+          <li>wind degree (degree).</li>
+        </ul>
+        <p>If app cannot find given location, it outputs the message with error.</p>
+      </div>
+
+      <div class="segment-container">
+        <h4>Examples</h4>
+
+        <div id="appExamples" class="carousel slide" data-bs-ride="carousel">
+          <div class="carousel-indicators">
+            <button type="button" data-bs-target="#appExamples" data-bs-slide-to="0" class="active" aria-current="true"
+                    aria-label="Slide 1"></button>
+            <button type="button" data-bs-target="#appExamples" data-bs-slide-to="1" aria-label="Slide 2"></button>
+            <button type="button" data-bs-target="#appExamples" data-bs-slide-to="2" aria-label="Slide 3"></button>
+            <button type="button" data-bs-target="#appExamples" data-bs-slide-to="3" aria-label="Slide 4"></button>
+          </div>
+          <div class="carousel-inner">
+            <div class="carousel-item active" data-bs-interval="5000">
+              <img src="main/assets/images/home_example.png" class="d-block w-100" alt="...">
+              <div class="carousel-caption d-none d-md-block" style="color: black">
+                <h5>Standard functionality</h5>
+                <p>Enter city or location and check forecast for tomorrow.</p>
+              </div>
+            </div>
+            <div class="carousel-item" data-bs-interval="5000">
+              <img src="main/assets/images/app_example.png" class="d-block w-100" alt="...">
+              <div class="carousel-caption d-none d-md-block" style="color: black">
+                <h5>Extended functionality</h5>
+                <p>Choose day from available dates and check.</p>
+              </div>
+            </div>
+            <div class="carousel-item" data-bs-interval="5000">
+              <img src="main/assets/images/result_example.png" class="d-block w-100" alt="...">
+              <div class="carousel-caption d-none d-md-block">
+                <h5>Result</h5>
+                <p>See result forecast.</p>
+              </div>
+            </div>
+            <div class="carousel-item" data-bs-interval="5000">
+              <img src="main/assets/images/notfound_example.png" class="d-block w-100" alt="...">
+              <div class="carousel-caption d-none d-md-block">
+                <h5>Error</h5>
+                <p>Not found given city or location.</p>
+              </div>
+            </div>
+          </div>
+          <button class="carousel-control-prev" type="button" data-bs-target="#appExamples" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon"></span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#appExamples" data-bs-slide="next">
+            <span class="carousel-control-next-icon"></span>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

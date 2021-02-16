@@ -5,12 +5,14 @@ import {ForecastsComponent} from './components/forecasts/forecasts.component';
 import {ForecastResolver} from './service/forecast.resolver';
 import {WeatherAppComponent} from './components/weather-app/weather-app.component';
 import {ContactComponent} from './components/contact/contact.component';
+import {AboutComponent} from './components/about/about.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'weather-app', component: WeatherAppComponent },
   { path: 'forecasts', component: ForecastsComponent, resolve: { forecasts: ForecastResolver } },
-  { path: 'contact', component: ContactComponent }
+  { path: 'contact', component: ContactComponent },
+  { path: 'about', component: AboutComponent }
 ];
 
 
