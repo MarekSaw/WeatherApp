@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {AuthService} from '../../service/auth.service';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
+import * as $ from 'jquery';
+import {Router} from '@angular/router';
 
 
 function passwordMatchValidator(g: FormGroup): any {
@@ -33,15 +35,22 @@ export class RegisterComponent implements OnInit {
       Validators.pattern('^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-.,_]).{8,}$'),
     ])}, passwordMatchValidator);
 
+  isAlertActive: boolean;
   isSuccessful: boolean;
   isRegisterFailed: boolean;
   errorMessage = '';
 
 
-  constructor(private authService: AuthService) {
+  constructor(private authService: AuthService, private router: Router) {
   }
 
   ngOnInit(): void {
+    $('.content').on('click', () => {
+      if (this.isAlertActive) {
+        ($('.toast') as any).animate({opacity: '0'});
+        this.isAlertActive = false;
+      }
+    });
   }
 
   onSubmit(): void {
@@ -86,12 +95,20 @@ export class RegisterComponent implements OnInit {
         console.log(data);
         this.isSuccessful = true;
         this.isRegisterFailed = false;
+        ($('#successToast') as any).animate({opacity: '1'});
+        this.isAlertActive = true;
       },
       error => {
         this.errorMessage = error.error.message;
         this.isRegisterFailed = true;
+        ($('#errorToast') as any).animate({opacity: '1'});
+        this.isAlertActive = true;
       }
     );
+  }
+
+  goToLoginPage(): void {
+    this.router.navigateByUrl('login');
   }
 
 }

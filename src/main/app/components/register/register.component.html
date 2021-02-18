@@ -1,12 +1,13 @@
 <div class="content">
   <div class="app-content">
     <div class="container">
-      <h1 class="mb-4">Register now</h1>
       <div class="col-md-12">
         <form class="flex-column d-flex align-items-center"
               *ngIf="!isSuccessful"
               [formGroup]="registerGroup"
               (ngSubmit)="onSubmit()">
+          <img class="mb-2" src="main/assets/icons/register.png" alt="">
+
           <div class="form-floating mb-3">
             <input type="text" class="form-control" id="username" formControlName="username" (input)="checkForm()"/>
             <label for="username">Username</label>
@@ -35,7 +36,8 @@
             </div>
           </div>
           <div class="form-floating mb-3">
-            <input type="password" class="form-control" id="passwordConfirm" formControlName="passwordConfirm" (input)="checkForm()"/>
+            <input type="password" class="form-control" id="passwordConfirm" formControlName="passwordConfirm"
+                   (input)="checkForm()"/>
             <label for="passwordConfirm">Confirm password</label>
             <div class="invalid-tooltip">
               <div>Confirm password must match the password</div>
@@ -44,14 +46,30 @@
 
           <button class="btn btn-primary w-50 mt-2">Sign Up</button>
 
-          <div class="alert alert-warning" *ngIf="isRegisterFailed">
-            Signup failed!<br/>{{ errorMessage }}
+          <div id="errorToast" class="toast align-items-center text-white bg-danger border-0" role="alert"
+               aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+              <div class="toast-body">
+                Signup failed!<br/>{{ errorMessage }}
+              </div>
+            </div>
           </div>
+
         </form>
 
-        <div class="alert alert-success" *ngIf="isSuccessful">
-          Your registration is successful!
+        <div class="flex-column d-flex align-items-center">
+          <div id="successToast" class="toast align-items-center text-white bg-success border-0" role="alert"
+               aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+              <div class="toast-body">
+                Your registration is successful!
+              </div>
+            </div>
+          </div>
+          <button class="btn btn-primary w-100" *ngIf="isSuccessful" (click)="goToLoginPage()">Go to Login page
+          </button>
         </div>
+
       </div>
     </div>
   </div>
