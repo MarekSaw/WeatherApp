@@ -32,6 +32,8 @@ export class WeatherAppComponent implements OnInit {
 
   weatherLocation = '';
   weatherParametersModal: WeatherForecastModel = {temperature: 0, pressure: 0, humidity: 0, windSpeed: 0, windDeg: 0};
+  isAlertActive: boolean;
+
   today: Date;
   sevenDaysForward: Date;
   minDate: string;
@@ -52,6 +54,12 @@ export class WeatherAppComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    $('.content').on('click', () => {
+      if (this.isAlertActive) {
+        ($('.toast') as any).animate({opacity: '0'});
+        this.isAlertActive = false;
+      }
+    });
     $('.select').on('change', () => {
       this.changeLocalizationType();
     });
@@ -69,7 +77,8 @@ export class WeatherAppComponent implements OnInit {
         },
         error => {
           this.isSpinnerLoadingEnabled = false;
-          ($('#errorModal') as any).modal('show');
+          ($('.toast') as any).animate({opacity: '1'});
+          this.isAlertActive = true;
         });
     } else {
       this.weatherLocation = `lat: ${latitude.toFixed(3)}, lon: ${longitude.toFixed(3)}`;
@@ -81,7 +90,8 @@ export class WeatherAppComponent implements OnInit {
         },
         error => {
           this.isSpinnerLoadingEnabled = false;
-          ($('#errorModal') as any).modal('show');
+          ($('.toast') as any).animate({opacity: '1'});
+          this.isAlertActive = true;
         });
     }
   }

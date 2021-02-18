@@ -40,3 +40,8 @@ input[type=number] {
   text-align: center;
   font-size: 18px;
 }
+
+.toast {
+  position: absolute;
+  top: 10%;
+}
