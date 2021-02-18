@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import {AuthService} from '../../service/auth.service';
 import {TokenStorageService} from '../../service/token-storage.service';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
+import * as $ from 'jquery';
+import {Router} from '@angular/router';
 
 
 @Component({
@@ -10,26 +12,31 @@ import {FormControl, FormGroup, Validators} from '@angular/forms';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-  form: any = {
-    username: null,
-    password: null
-  };
   loginGroup = new FormGroup( {
     username: new FormControl('', Validators.required),
     password: new FormControl('', Validators.required),
   });
   isLoggedIn: boolean;
   isLoginFailed: boolean;
+  isAlertActive: boolean;
   errorMessage = '';
   roles: string[] = [];
+  username: string;
 
-  constructor(private authService: AuthService, private tokenStorage: TokenStorageService) { }
+  constructor(private authService: AuthService, private tokenStorage: TokenStorageService, private router: Router) { }
 
   ngOnInit(): void {
+    this.username = this.tokenStorage.getUser().username;
     if (this.tokenStorage.getToken()) {
       this.isLoggedIn = true;
       this.roles = this.tokenStorage.getUser().roles;
     }
+    $('.content').on('click', () => {
+      if (this.isAlertActive) {
+        ($('.toast') as any).animate({opacity: '0'});
+        this.isAlertActive = false;
+      }
+    });
   }
 
   onSubmit(): void {
@@ -64,16 +71,19 @@ export class LoginComponent implements OnInit {
         this.isLoginFailed = false;
         this.isLoggedIn = true;
         this.roles = this.tokenStorage.getUser().roles;
-        this.reloadPage();
+        this.username = this.tokenStorage.getUser().username;
+        this.redirect();
       },
       error => {
         this.errorMessage = error.error.message;
         this.isLoginFailed = true;
+        ($('#errorToast') as any).animate({opacity: '1'});
+        this.isAlertActive = true;
       }
     );
   }
 
-  public reloadPage(): void {
-    window.location.reload();
+  public redirect(): void {
+    this.router.navigateByUrl('');
   }
 }

@@ -1,13 +1,16 @@
 <div class="content">
   <div class="app-content">
     <div class="container">
-      <h1>Log in now</h1>
+
       <div class="col-md-12">
         <form class="flex-column d-flex align-items-center"
           *ngIf="!isLoggedIn"
           [formGroup]="loginGroup"
           (ngSubmit)="onSubmit()">
-
+          <div class="d-flex flex-row align-items-center">
+          <img class="m-2" src="main/assets/icons/login.png" alt="">
+          <h1 class="m-2">Login</h1>
+          </div>
           <div class="form-floating mb-3 mt-3">
             <input type="text" class="form-control" id="username" formControlName="username" (input)="checkForm()"/>
             <label for="username">Username</label>
@@ -25,10 +28,20 @@
           </div>
 
           <button class="btn btn-primary w-50 mt-3" type="submit">Sign In</button>
+
+          <div id="errorToast" class="toast align-items-center text-white bg-danger border-0" role="alert"
+               aria-live="assertive" aria-atomic="true">
+            <div class="d-flex justify-content-center">
+              <div class="toast-body">
+                <div class="d-flex justify-content-center">Signup failed!</div>
+                <div>Invalid username or password</div>
+              </div>
+            </div>
+          </div>
         </form>
 
         <div class="alert alert-success" *ngIf="isLoggedIn">
-          Logged in as {{ roles }}.
+          Logged in as {{ username }}.
         </div>
       </div>
     </div>

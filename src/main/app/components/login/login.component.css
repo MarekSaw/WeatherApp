@@ -20,3 +20,8 @@
 input {
   width: 200px;
 }
+
+.toast {
+  position: absolute;
+  top: 10%;
+}
