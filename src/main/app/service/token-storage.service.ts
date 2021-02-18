@@ -10,7 +10,7 @@ export class TokenStorageService {
 
   constructor() { }
 
-  public logOut(): void {
+  public logout(): void {
     window.sessionStorage.clear();
   }
 
