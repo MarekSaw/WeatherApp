@@ -1,0 +1,37 @@
+<div class="content">
+  <div class="app-content">
+    <div class="container">
+      <h1>Log in now</h1>
+      <div class="col-md-12">
+        <form class="flex-column d-flex align-items-center"
+          *ngIf="!isLoggedIn"
+          [formGroup]="loginGroup"
+          (ngSubmit)="onSubmit()">
+
+          <div class="form-floating mb-3 mt-3">
+            <input type="text" class="form-control" id="username" formControlName="username" (input)="checkForm()"/>
+            <label for="username">Username</label>
+            <div class="invalid-tooltip">
+              Username is required!
+            </div>
+          </div>
+
+          <div class="form-floating mb-3">
+            <input type="password" class="form-control" id="password" formControlName="password" (input)="checkForm()"/>
+            <label for="password">Password</label>
+            <div class="invalid-tooltip">
+              Password is required
+            </div>
+          </div>
+
+          <button class="btn btn-primary w-50 mt-3" type="submit">Sign In</button>
+        </form>
+
+        <div class="alert alert-success" *ngIf="isLoggedIn">
+          Logged in as {{ roles }}.
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
