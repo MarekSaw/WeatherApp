@@ -48,9 +48,10 @@
 
           <div id="errorToast" class="toast align-items-center text-white bg-danger border-0" role="alert"
                aria-live="assertive" aria-atomic="true">
-            <div class="d-flex">
+            <div class="d-flex justify-content-center">
               <div class="toast-body">
-                Signup failed!<br/>{{ errorMessage }}
+                <div class="d-flex justify-content-center">Signup failed!</div>
+                <div>{{ errorMessage }}</div>
               </div>
             </div>
           </div>
@@ -60,7 +61,7 @@
         <div class="flex-column d-flex align-items-center">
           <div id="successToast" class="toast align-items-center text-white bg-success border-0" role="alert"
                aria-live="assertive" aria-atomic="true">
-            <div class="d-flex">
+            <div class="d-flex justify-content-center">
               <div class="toast-body">
                 Your registration is successful!
               </div>
