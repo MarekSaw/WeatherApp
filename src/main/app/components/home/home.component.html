@@ -7,13 +7,14 @@
       <p>Sign up for more!</p>
 
 
-      <form class="row g-3 mb-3 mt-3 min-vw-50 align-items-center" [formGroup]="firstFormGroup"
-            (ngSubmit)="findWeather(cityFormControl.value, latitudeFormControl.value, longitudeFormControl.value)">
+      <form class="row g-3 mb-3 mt-3 min-vw-50 align-items-center"
+            [formGroup]="locationGroup"
+            (ngSubmit)="findWeather()">
 
         <div class="col" *ngIf="isCity">
           <div class="form-floating">
-            <input type="text" class="form-control" id="city" [formControl]="cityFormControl"
-            [classList]="cityFormControl.hasError('pattern') ? 'form-control is-invalid' : 'form-control'">
+            <input type="text" class="form-control" id="city" formControlName="city"
+            [classList]="locationGroup.get('city').hasError('pattern') ? 'form-control is-invalid' : 'form-control'">
             <label for="city">City name</label>
             <div class="invalid-tooltip">
               Please enter valid city's name.
@@ -24,8 +25,8 @@
         <div class="col" *ngIf="!isCity">
           <div class="row mb-3 col">
             <div class="form-floating">
-              <input type="number" class="form-control" id="latitude" [formControl]="latitudeFormControl"
-                     [classList]="latitudeFormControl.hasError('pattern') ? 'form-control is-invalid' : 'form-control'">
+              <input type="number" class="form-control" id="latitude" formControlName="latitude"
+                     [classList]="locationGroup.get('latitude').hasError('pattern') ? 'form-control is-invalid' : 'form-control'">
               <label for="latitude">&emsp;Latitude</label>
               <div class="invalid-tooltip">
                 Value should be in range (-90 : 90) with max 6 decimal digits.
@@ -34,8 +35,8 @@
           </div>
           <div class="row col">
             <div class="form-floating">
-              <input type="number" class="form-control" id="longitude" [formControl]="longitudeFormControl"
-                     [classList]="longitudeFormControl.hasError('pattern') ? 'form-control is-invalid' : 'form-control'">
+              <input type="number" class="form-control" id="longitude" formControlName="longitude"
+                     [classList]="locationGroup.get('longitude').hasError('pattern') ? 'form-control is-invalid' : 'form-control'">
               <label for="longitude">&emsp;Longitude</label>
               <div class="invalid-tooltip">
                 Value should be in range (-180 : 180) with max 6 decimal digits.
@@ -55,7 +56,7 @@
         </div>
         <div class="col-sm-2">
           <button type="submit" class="btn btn-primary"
-                  [disabled]="!cityFormControl.valid && isCity || !(latitudeFormControl.valid && longitudeFormControl.valid) && !isCity">
+                  [disabled]="!locationGroup.get('city').valid && isCity || !(locationGroup.get('latitude').valid && locationGroup.get('longitude').valid) && !isCity">
             Check</button>
         </div>
       </form>

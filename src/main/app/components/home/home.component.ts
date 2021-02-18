@@ -2,7 +2,6 @@ import {Component, OnInit} from '@angular/core';
 import {WeatherForecastService} from '../../service/weather-forecast.service';
 import {WeatherForecastModel} from '../model/WeatherForecastModel';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import * as $ from 'jquery';
 
 @Component({
   selector: 'app-home',
@@ -15,28 +14,27 @@ export class HomeComponent implements OnInit {
   weatherForecast: WeatherForecastModel;
   isCity: boolean;
   isSpinnerLoadingEnabled: boolean;
-  firstFormGroup: FormGroup;
-  cityFormControl = new FormControl('', [
-    Validators.required,
-    Validators.pattern('[a-zA-Z ]*'),
-  ]);
-  latitudeFormControl = new FormControl('', [
-    Validators.required,
-    Validators.pattern('^(\\+|-)?(?:90(?:(?:\\.0{1,6})?)|(?:[0-9]|[1-8][0-9])(?:(?:\\.[0-9]{1,6})?))$'),
-  ]);
-  longitudeFormControl = new FormControl('', [
-    Validators.required,
-    Validators.pattern('^(\\+|-)?(?:180(?:(?:\\.0{1,6})?)|(?:[0-9]|[1-9][0-9]|1[0-7][0-9])(?:(?:\\.[0-9]{1,6})?))$'),
-  ]);
+  locationGroup = new FormGroup({
+    city: new FormControl('', [
+      Validators.required,
+      Validators.pattern('[a-zA-Z ]*'),
+    ]),
+    latitude: new FormControl('', [
+      Validators.required,
+      Validators.pattern('^(\\+|-)?(?:90(?:(?:\\.0{1,6})?)|(?:[0-9]|[1-8][0-9])(?:(?:\\.[0-9]{1,6})?))$'),
+    ]),
+    longitude: new FormControl('', [
+      Validators.required,
+      Validators.pattern('^(\\+|-)?(?:180(?:(?:\\.0{1,6})?)|(?:[0-9]|[1-9][0-9]|1[0-7][0-9])(?:(?:\\.[0-9]{1,6})?))$'),
+    ]),
+  });
+
   weatherLocation = '';
   weatherParametersModal: WeatherForecastModel = {temperature: 0, pressure: 0, humidity: 0, windSpeed: 0, windDeg: 0};
   isAlertActive: boolean;
 
   constructor(private formBuilder: FormBuilder, private weatherForecastService: WeatherForecastService) {
     this.isCity = true;
-    this.firstFormGroup = this.formBuilder.group({
-      firstCtrl: ['', Validators.required]
-    });
   }
 
   ngOnInit(): void {
@@ -51,11 +49,11 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  public findWeather(location: string, latitude: number, longitude: number): void {
+  public findWeather(): void {
     this.isSpinnerLoadingEnabled = true;
     if (this.isCity) {
-      this.weatherLocation = location;
-      this.weatherForecastService.findWeatherForCity(location).subscribe(
+      this.weatherLocation = this.locationGroup.get('city').value;
+      this.weatherForecastService.findWeatherForCity(this.weatherLocation).subscribe(
         value => {
           this.weatherForecast = value;
           this.loadDataToModal();
@@ -67,8 +65,10 @@ export class HomeComponent implements OnInit {
           this.isAlertActive = true;
         });
     } else {
-      this.weatherLocation = `lat: ${latitude.toFixed(3)}, lon: ${longitude.toFixed(3)}`;
-      this.weatherForecastService.findWeatherForCoordinates(latitude, longitude).subscribe(
+      const lat = this.locationGroup.get('latitude').value;
+      const lon = this.locationGroup.get('longitude').value;
+      this.weatherLocation = `lat: ${lat.toFixed(3)}, lon: ${lon.toFixed(3)}`;
+      this.weatherForecastService.findWeatherForCoordinates(lat, lon).subscribe(
         value => {
           this.weatherForecast = value;
           this.loadDataToModal();
@@ -82,7 +82,7 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  public loadDataToModal(): void {
+  private loadDataToModal(): void {
     for (const key in this.weatherParametersModal) {
       if (this.weatherForecast[key] !== null) {
         this.weatherParametersModal[key] = this.weatherForecast[key];
