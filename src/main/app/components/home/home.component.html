@@ -119,19 +119,12 @@
         </div>
       </div>
 
-      <div class="modal fade" id="errorModal" tabindex="-1">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-              <h5 class="btn-danger fw-bold p-2">Forecast not found for given location:</h5>
-              <p>Make sure you entered valid city name or correct coordinates values.</p>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
-            </div>
+      <div id="errorToast" class="toast align-items-center text-white bg-danger border-0" role="alert"
+           aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+          <div class="toast-body">
+            <div class="d-flex justify-content-center mb-2" style="font-weight: bold; font-size: 18px">Forecast not found for given location!</div>
+            <div style="text-align: center">Make sure you entered valid city name or correct coordinates values.</div>
           </div>
         </div>
       </div>

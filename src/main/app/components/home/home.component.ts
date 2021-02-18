@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {WeatherForecastService} from '../../service/weather-forecast.service';
 import {WeatherForecastModel} from '../model/WeatherForecastModel';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import * as $ from 'jquery';
 
 @Component({
   selector: 'app-home',
@@ -29,6 +30,7 @@ export class HomeComponent implements OnInit {
   ]);
   weatherLocation = '';
   weatherParametersModal: WeatherForecastModel = {temperature: 0, pressure: 0, humidity: 0, windSpeed: 0, windDeg: 0};
+  isAlertActive: boolean;
 
   constructor(private formBuilder: FormBuilder, private weatherForecastService: WeatherForecastService) {
     this.isCity = true;
@@ -38,6 +40,12 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    $('.content').on('click', () => {
+      if (this.isAlertActive) {
+        ($('.toast') as any).animate({opacity: '0'});
+        this.isAlertActive = false;
+      }
+    });
     $('.select').on('change', () => {
       this.isCity = !this.isCity;
     });
@@ -55,7 +63,8 @@ export class HomeComponent implements OnInit {
         },
         error => {
           this.isSpinnerLoadingEnabled = false;
-          ($('#errorModal') as any).modal('show');
+          ($('.toast') as any).animate({opacity: '1'});
+          this.isAlertActive = true;
         });
     } else {
       this.weatherLocation = `lat: ${latitude.toFixed(3)}, lon: ${longitude.toFixed(3)}`;
@@ -67,7 +76,8 @@ export class HomeComponent implements OnInit {
         },
         error => {
           this.isSpinnerLoadingEnabled = false;
-          ($('#errorModal') as any).modal('show');
+          ($('.toast') as any).animate({opacity: '1'});
+          this.isAlertActive = true;
         });
     }
   }
