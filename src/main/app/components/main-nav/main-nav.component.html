@@ -1,4 +1,4 @@
-<div class="main-nav-container">
+<div class="main-nav-container" [ngSwitch]="isLoggedIn">
   <nav class="navbar navbar-dark bg-dark bg bg-gradient">
     <div class="icons-container">
       <img class="toggle-button" src="main/assets/icons/home2.png" (click)="toggleNav()">
@@ -6,16 +6,29 @@
     </div>
     <div class="nav-buttons-container">
       <a [routerLink]="''" class="nav-button"><img class="nav-icon icon" src="main/assets/icons/home.png">Home</a>
+      <div class="d-flex align-items-center" *ngSwitchCase="false">
       <a [routerLink]="'login'" class="nav-button"><img class="nav-icon icon" src="main/assets/icons/login.png">Login</a>
       <a [routerLink]="'register'" class="nav-button"><img class="nav-icon icon" src="main/assets/icons/register.png">Register</a>
-
+      </div>
+      <div class="d-flex align-items-center" *ngSwitchCase="true">
+        <div class="d-flex flex-column">
+      <p>Logged in as</p>
+      <p><strong>{{ username }}</strong></p>
+        </div>
+      <a class="nav-button" (click)="logout()"><img class="nav-icon icon" src="main/assets/icons/logout.png">Logout</a>
+      </div>
     </div>
   </nav>
 <div class="side-nav">
   <div class="side-nav-content bg-dark">
     <p class="side-nav-title">WeatherApp</p>
-    <a class="side-nav-button" [routerLink]="'weather-app'" (click)="toggleNav()">WeatherApp</a>
-    <a class="side-nav-button" [routerLink]="'forecasts'" (click)="toggleNav()">Forecasts</a>
+    <div *ngSwitchCase="true">
+    <a class="side-nav-button mb-3" [routerLink]="'weather-app'" (click)="toggleNav()">WeatherApp</a>
+    <a class="side-nav-button mb-3" [routerLink]="'forecasts'" (click)="toggleNav()">Forecasts</a>
+    </div>
+    <div *ngSwitchCase="false">
+      <p class="mt-5" style="font-size: 16px">Sign in for more features!</p>
+    </div>
   </div>
 </div>
   <div class="content">

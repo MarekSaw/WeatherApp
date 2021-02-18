@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import * as $ from 'jquery';
+import {TokenStorageService} from '../../service/token-storage.service';
 
 @Component({
   selector: 'app-main-nav',
@@ -9,8 +10,10 @@ import * as $ from 'jquery';
 export class MainNavComponent implements OnInit {
 
   isSideNavOpen: boolean;
+  isLoggedIn: boolean;
+  username: string;
 
-  constructor() { }
+  constructor(private tokenStorage: TokenStorageService) { }
 
   ngOnInit(): void {
     $('.side-nav-content').hide();
@@ -19,6 +22,17 @@ export class MainNavComponent implements OnInit {
         this.toggleNav();
       }
     });
+
+    this.isLoggedIn = !!this.tokenStorage.getToken();
+    if (this.isLoggedIn) {
+      const user = this.tokenStorage.getUser();
+      this.username = user.username;
+    }
+  }
+
+  logout(): void {
+    this.tokenStorage.logout();
+    window.location.reload();
   }
 
   public toggleNav(): void {
