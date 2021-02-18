@@ -20,12 +20,7 @@ export class GlobalHttpInterceptorService implements HttpInterceptor {
           if (error.error instanceof ErrorEvent) {
             console.error('Error Event');
           } else {
-            console.log(`error status : ${error.status}`);
-            switch (error.status) {
-              case 404:
-                console.log('Weather forecast not found for given location');
-                break;
-            }
+            console.log(`error status : ${error.status} : ${error.error.message}`);
           }
         } else {
           console.error('Other Errors');

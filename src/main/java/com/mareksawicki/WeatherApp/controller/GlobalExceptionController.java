@@ -31,7 +31,7 @@ public class GlobalExceptionController {
     return new Error(usernameNotFoundException.getMessage());
   }
 
-  @ResponseStatus(HttpStatus.IM_USED)
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
   @ExceptionHandler(UserAlreadyExistsException.class)
   public Error userAlreadyExistsExceptionHandler(UserAlreadyExistsException userAlreadyExistsException) {
     return new Error(userAlreadyExistsException.getMessage());

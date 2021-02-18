@@ -35,7 +35,7 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserService {
 
   @Override
   public User createNewUser(User user) {
-    if(!userRepository.existsByUsername(user.getUsername()) || !userRepository.existsByEmail(user.getEmail())) {
+    if(!userRepository.existsByUsername(user.getUsername()) && !userRepository.existsByEmail(user.getEmail())) {
       user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
       if(Objects.isNull(user.getEnabled())) {
         user.setEnabled(true);

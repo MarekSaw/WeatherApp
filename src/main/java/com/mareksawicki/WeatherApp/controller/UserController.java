@@ -45,9 +45,6 @@ public class UserController {
   @PostMapping("/register")
   public ResponseEntity<?> createNewUser(@Valid @RequestBody User user) {
     User createdUser = userService.createNewUser(user);
-    if(Objects.isNull(createdUser)) {
-      return ResponseEntity.badRequest().body(new MessageResponse("Error: Username or email is already taken"));
-    }
     createdUser.setPassword(null);
     return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
   }
@@ -69,12 +66,8 @@ public class UserController {
   @PutMapping
   public ResponseEntity<?> updateUser(@RequestParam String username,
                                       @RequestBody User user) {
-    try {
-      User updatedUser = userService.updateUserByUsername(username, user);
-      return ResponseEntity.ok(updatedUser);
-    } catch (UserAlreadyExistsException exception) {
-      return ResponseEntity.status(HttpStatus.IM_USED).body(exception.getMessage());
-    }
+    User updatedUser = userService.updateUserByUsername(username, user);
+    return ResponseEntity.ok(updatedUser);
   }
 
   @DeleteMapping
