@@ -72,7 +72,7 @@ export class LoginComponent implements OnInit {
         this.isLoggedIn = true;
         this.roles = this.tokenStorage.getUser().roles;
         this.username = this.tokenStorage.getUser().username;
-        this.redirect();
+        this.reload();
       },
       error => {
         this.errorMessage = error.error.message;
@@ -83,7 +83,7 @@ export class LoginComponent implements OnInit {
     );
   }
 
-  public redirect(): void {
-    this.router.navigateByUrl('');
+  public reload(): void {
+    window.location.reload();
   }
 }
