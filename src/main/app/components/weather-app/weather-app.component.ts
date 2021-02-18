@@ -12,45 +12,38 @@ export class WeatherAppComponent implements OnInit {
 
   cityName: string;
   weatherForecast: WeatherForecastModel;
-  isCity: boolean;
+  isCity = true;
   isSpinnerLoadingEnabled: boolean;
 
-  formGroup: FormGroup;
-  cityFormControl = new FormControl('', [
-    Validators.required,
-    Validators.pattern('[a-zA-Z ]*'),
-  ]);
-  latitudeFormControl = new FormControl('', [
-    Validators.required,
-    Validators.pattern('^(\\+|-)?(?:90(?:(?:\\.0{1,6})?)|(?:[0-9]|[1-8][0-9])(?:(?:\\.[0-9]{1,6})?))$'),
-  ]);
-  longitudeFormControl = new FormControl('', [
-    Validators.required,
-    Validators.pattern('^(\\+|-)?(?:180(?:(?:\\.0{1,6})?)|(?:[0-9]|[1-9][0-9]|1[0-7][0-9])(?:(?:\\.[0-9]{1,6})?))$'),
-  ]);
-  dateFormControl: FormControl;
+  today = new Date(new Date().setDate(new Date(Date.now()).getDate()));
+  sevenDaysForward = new Date(new Date().setDate(new Date(Date.now()).getDate() + 7));
+  minDate = this.toInputDateString(this.today);
+  maxDate = this.toInputDateString(this.sevenDaysForward);
+
+  weatherGroup = new FormGroup({
+    city: new FormControl('', [
+      Validators.required,
+      Validators.pattern('[a-zA-Z ]*'),
+    ]),
+    latitude: new FormControl('', [
+      Validators.required,
+      Validators.pattern('^(\\+|-)?(?:90(?:(?:\\.0{1,6})?)|(?:[0-9]|[1-8][0-9])(?:(?:\\.[0-9]{1,6})?))$'),
+    ]),
+    longitude: new FormControl('', [
+      Validators.required,
+      Validators.pattern('^(\\+|-)?(?:180(?:(?:\\.0{1,6})?)|(?:[0-9]|[1-9][0-9]|1[0-7][0-9])(?:(?:\\.[0-9]{1,6})?))$'),
+    ]),
+    date: new FormControl(this.minDate, [
+      Validators.required,
+    ])
+  });
 
   weatherLocation = '';
   weatherParametersModal: WeatherForecastModel = {temperature: 0, pressure: 0, humidity: 0, windSpeed: 0, windDeg: 0};
   isAlertActive: boolean;
 
-  today: Date;
-  sevenDaysForward: Date;
-  minDate: string;
-  maxDate: string;
-
   constructor(private formBuilder: FormBuilder, private weatherForecastService: WeatherForecastService) {
-    this.isCity = true;
-    this.today = new Date(new Date().setDate(new Date(Date.now()).getDate()));
-    this.sevenDaysForward = new Date(new Date().setDate(new Date(Date.now()).getDate() + 7));
-    this.minDate = this.toInputDateString(this.today);
-    this.maxDate = this.toInputDateString(this.sevenDaysForward);
-    this.dateFormControl = new FormControl(this.minDate, [
-      Validators.required,
-    ]);
-    this.formGroup = this.formBuilder.group({
-      firstCtrl: ['', Validators.required]
-    });
+
   }
 
   ngOnInit(): void {
@@ -65,11 +58,12 @@ export class WeatherAppComponent implements OnInit {
     });
   }
 
-  public findWeather(location: string, latitude: number, longitude: number, date: string): void {
+  public findWeather(): void {
     this.isSpinnerLoadingEnabled = true;
+    const date = this.weatherGroup.get('date').value;
     if (this.isCity) {
-      this.weatherLocation = location;
-      this.weatherForecastService.findWeatherForCityWithDate(location, date).subscribe(
+      this.weatherLocation = this.weatherGroup.get('city').value;
+      this.weatherForecastService.findWeatherForCityWithDate(this.weatherLocation, date).subscribe(
         value => {
           this.weatherForecast = value;
           this.loadDataToModal();
@@ -81,8 +75,10 @@ export class WeatherAppComponent implements OnInit {
           this.isAlertActive = true;
         });
     } else {
-      this.weatherLocation = `lat: ${latitude.toFixed(3)}, lon: ${longitude.toFixed(3)}`;
-      this.weatherForecastService.findWeatherForCoordinatesWithDate(latitude, longitude, date).subscribe(
+      const lat = this.weatherGroup.get('latitude').value;
+      const lon = this.weatherGroup.get('longitude').value;
+      this.weatherLocation = `lat: ${lat.toFixed(3)}, lon: ${lon.toFixed(3)}`;
+      this.weatherForecastService.findWeatherForCoordinatesWithDate(lat, lon, date).subscribe(
         value => {
           this.weatherForecast = value;
           this.loadDataToModal();
@@ -97,8 +93,8 @@ export class WeatherAppComponent implements OnInit {
   }
 
   public isDateValid(): boolean {
-    return Date.parse(this.dateFormControl.value) > new Date().setDate(new Date(Date.now()).getDate() - 1)
-      && Date.parse(this.dateFormControl.value) < new Date().setDate(new Date(Date.now()).getDate() + 7);
+    return Date.parse(this.weatherGroup.get('date').value) > new Date().setDate(new Date(Date.now()).getDate() - 1)
+      && Date.parse(this.weatherGroup.get('date').value) < new Date().setDate(new Date(Date.now()).getDate() + 7);
   }
 
   public loadDataToModal(): void {
