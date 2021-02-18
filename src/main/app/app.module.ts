@@ -14,6 +14,8 @@ import { ContactComponent } from './components/contact/contact.component';
 import { AboutComponent } from './components/about/about.component';
 import { LoginComponent } from './components/login/login.component';
 import {authInterceptorProviders} from './service/auth.interceptor';
+import { RegisterComponent } from './components/register/register.component';
+import { ProfileComponent } from './components/profile/profile.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +26,9 @@ import {authInterceptorProviders} from './service/auth.interceptor';
     WeatherAppComponent,
     ContactComponent,
     AboutComponent,
-    LoginComponent
+    LoginComponent,
+    RegisterComponent,
+    ProfileComponent
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,62 @@
+<div class="content">
+  <div class="app-content">
+    <div class="container">
+      <h1 class="mb-4">Register now</h1>
+      <div class="col-md-12">
+        <form class="flex-column d-flex align-items-center"
+              *ngIf="!isSuccessful"
+              [formGroup]="registerGroup"
+              (ngSubmit)="onSubmit()">
+          <div class="form-floating mb-3">
+            <input type="text" id="username" formControlName="usernameForm"
+                   [classList]="registerGroup.get('usernameForm').hasError('pattern') ? 'form-control is-invalid' : 'form-control'"/>
+            <label for="username">Username</label>
+            <div class="invalid-tooltip">
+              <div>Username must contains from 4 to 20 characters</div>
+            </div>
+          </div>
+          <div class="form-floating mb-3">
+            <input type="email" id="email" formControlName="emailForm"
+                   [classList]="registerGroup.get('emailForm').hasError('pattern') ? 'form-control is-invalid' : 'form-control'"/>
+            <label for="email">Email</label>
+            <div class="invalid-tooltip">
+              <div>Email is invalid, ex: example@domain.com</div>
+            </div>
+          </div>
+          <div class="form-floating mb-3">
+            <input type="password" id="password" formControlName="passwordForm"
+                   [classList]="registerGroup.get('passwordForm').hasError('pattern') ? 'form-control is-invalid' : 'form-control'"/>
+            <label for="password">Password</label>
+            <div class="invalid-tooltip">
+              <div>Password must be at least 8 characters long and must contains at least:</div>
+              <ul>
+                <li>one upper case letter,</li>
+                <li>one lower case letter,</li>
+                <li>one numeric value,</li>
+                <li>one special character - {{'{'}}#?!@$%^&*-.,_{{'}'}}.</li>
+              </ul>
+            </div>
+          </div>
+          <div class="form-floating mb-3">
+            <input type="password" id="passwordConfirm" formControlName="passwordConfirmForm"
+                   [classList]="registerGroup.get('passwordConfirmForm').hasError('pattern') ? 'form-control is-invalid' : 'form-control'"/>
+            <label for="passwordConfirm">Confirm password</label>
+            <div class="invalid-tooltip">
+              <div>Confirm password must match the password</div>
+            </div>
+          </div>
+
+          <button class="btn btn-primary w-50 mt-2" [disabled]="!registerGroup.valid">Sign Up</button>
+
+          <div class="alert alert-warning" *ngIf="isRegisterFailed">
+            Signup failed!<br/>{{ errorMessage }}
+          </div>
+        </form>
+
+        <div class="alert alert-success" *ngIf="isSuccessful">
+          Your registration is successful!
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
