@@ -1,0 +1,54 @@
+<div class="content">
+  <div class="app-content">
+    <div class="container">
+
+      <div class="profile-container" *ngIf="currentUser; else loggedOut">
+        <img class="mb-5" src="main/assets/icons/profile.png" alt="">
+
+        <div class="col">
+          <div class="mb-3 row">
+            <label for="username" class="col col-form-label"><strong>Username:</strong></label>
+            <div class="col">
+              <input type="text" readonly class="edit-input form-control-plaintext" id="username" [value]="currentUser.username">
+            </div>
+          </div>
+          <div class="mb-3 row">
+            <label for="email" class="col col-form-label"><strong>Email:</strong></label>
+            <div class="col">
+              <input type="text" readonly class="edit-input form-control-plaintext" id="email" [value]="currentUser.email">
+            </div>
+          </div>
+          <div class="mb-3 row">
+            <label for="password" class="col col-form-label"><strong>Password:</strong></label>
+            <div class="col">
+              <input type="password" readonly class="edit-input form-control-plaintext" id="password" value="***************">
+            </div>
+          </div>
+        </div>
+        <div class="flex-row align-self-end">
+          <div *ngIf="isEditModeEnabled">
+        <button class="btn btn-primary" (click)="toggleEditMode()">Cancel</button>
+        <button class="btn btn-primary">Ok</button>
+          </div>
+        <button class="btn btn-primary" *ngIf="!isEditModeEnabled" (click)="toggleEditMode()">Edit</button>
+        </div>
+
+        <ul class="list-unstyled">
+          <li class="mt-5"><strong>Roles: </strong>
+            <ul>
+              <li *ngFor="let role of currentUser.roles">{{ role }}</li>
+            </ul>
+          </li>
+          <li><strong>Token: </strong>{{ currentUser.token.substring(0, 15) }} ...
+            {{ currentUser.token.substr(currentUser.token.length - 15) }}
+          </li>
+        </ul>
+      </div>
+
+      <ng-template #loggedOut>
+        Please login.
+      </ng-template>
+
+    </div>
+  </div>
+</div>
