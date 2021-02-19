@@ -23,6 +23,7 @@
   <div class="side-nav-content bg-dark">
     <p class="side-nav-title">WeatherApp</p>
     <div *ngSwitchCase="true">
+    <a class="side-nav-button mb-3" [routerLink]="'profile'" (click)="toggleNav()">Profile</a>
     <a class="side-nav-button mb-3" [routerLink]="'weather-app'" (click)="toggleNav()">WeatherApp</a>
     <a class="side-nav-button mb-3" [routerLink]="'forecasts'" (click)="toggleNav()">Forecasts</a>
     </div>
