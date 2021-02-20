@@ -48,11 +48,9 @@ export class ProfileComponent implements OnInit {
       }
     });
     this.currentUser = this.tokenStorage.getUser();
-    console.log(this.tokenStorage.getToken());
-    this.updateGroup.get('newUsername').setValue('user14');
+    this.updateGroup.get('newUsername').setValue(this.currentUser.username);
     this.updateGroup.get('newEmail').setValue(this.currentUser.email);
-    this.updateGroup.get('newPassword').setValue('Mango123.');
-    this.authorizeGroup.get('password').setValue('Mango123.');
+    this.updateGroup.get('newPassword').setValue('**********');
   }
 
   toggleEditMode(): void {
@@ -62,11 +60,13 @@ export class ProfileComponent implements OnInit {
       input.attr('readonly', 'readonly');
       input.removeClass('form-control');
       input.addClass('form-control-plaintext');
+      this.updateGroup.get('newPassword').setValue('**********');
     } else {
       this.isEditModeEnabled = !this.isEditModeEnabled;
       input.removeAttr('readonly');
       input.removeClass('form-control-plaintext');
       input.addClass('form-control');
+      this.updateGroup.get('newPassword').setValue('');
     }
   }
 
