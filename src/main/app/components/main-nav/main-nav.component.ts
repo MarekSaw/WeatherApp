@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import * as $ from 'jquery';
 import {TokenStorageService} from '../../service/token-storage.service';
 import {ObserverService} from '../../service/observer.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-main-nav',
@@ -14,7 +15,7 @@ export class MainNavComponent implements OnInit {
   isLoggedIn: boolean;
   username: string;
 
-  constructor(private tokenStorage: TokenStorageService, private subscriber: ObserverService) {
+  constructor(private tokenStorage: TokenStorageService, private subscriber: ObserverService, private router: Router) {
     this.subscriber.usernameObservable.subscribe(value =>  this.username = value);
   }
 
@@ -35,7 +36,8 @@ export class MainNavComponent implements OnInit {
 
   logout(): void {
     this.tokenStorage.logout();
-    window.location.reload();
+    this.isLoggedIn = false;
+    this.router.navigateByUrl('');
   }
 
   public toggleNav(): void {
