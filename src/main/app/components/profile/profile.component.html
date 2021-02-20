@@ -5,44 +5,108 @@
       <div class="profile-container" *ngIf="currentUser; else loggedOut">
         <img class="mb-5" src="main/assets/icons/profile.png" alt="">
 
-        <div class="col">
-          <div class="mb-3 row">
-            <label for="username" class="col col-form-label"><strong>Username:</strong></label>
-            <div class="col">
-              <input type="text" readonly class="edit-input form-control-plaintext" id="username" [value]="currentUser.username">
+        <form class="d-flex flex-column" [formGroup]="updateGroup">
+          <div class="col">
+            <div class="mb-3 row">
+              <label for="newUsername" class="col col-form-label"><strong>Username:</strong></label>
+              <div class="col input-group has-validation">
+                <input type="text" readonly class="edit-input form-control-plaintext" id="newUsername" formControlName="newUsername"
+                       (input)="checkForm()">
+                <div class="invalid-tooltip">
+                  <div>Username must contains from 4 to 20 characters</div>
+                </div>
+              </div>
+            </div>
+            <div class="mb-3 row">
+              <label for="newEmail" class="col col-form-label"><strong>Email:</strong></label>
+              <div class="col input-group has-validation">
+                <input type="text" readonly class="edit-input form-control-plaintext" id="newEmail" formControlName="newEmail"
+                       (input)="checkForm()">
+                <div class="invalid-tooltip">
+                  <div>Email is invalid, ex: example@domain.com</div>
+                </div>
+              </div>
+            </div>
+            <div class="mb-3 row">
+              <label for="newPassword" class="col col-form-label"><strong>Password:</strong></label>
+              <div class="col input-group has-validation">
+                <input type="password" readonly class="edit-input form-control-plaintext" id="newPassword" formControlName="newPassword"
+                       (input)="checkForm()">
+                <div class="invalid-tooltip">
+                  <div>Password must be at least 8 characters long and must contains at least:</div>
+                  <ul>
+                    <li>one upper case letter,</li>
+                    <li>one lower case letter,</li>
+                    <li>one numeric value,</li>
+                    <li>one special character - {{'{'}}#?!@$%^&*-.,_{{'}'}}.</li>
+                  </ul>
+                </div>
+              </div>
             </div>
           </div>
-          <div class="mb-3 row">
-            <label for="email" class="col col-form-label"><strong>Email:</strong></label>
-            <div class="col">
-              <input type="text" readonly class="edit-input form-control-plaintext" id="email" [value]="currentUser.email">
+          <div class="flex-row align-self-end">
+            <div *ngIf="isEditModeEnabled">
+              <button class="btn btn-secondary" (click)="toggleEditMode()">Cancel</button>
+              <button class="btn btn-primary" (click)="showAuthorizeToast()">Ok</button>
             </div>
+            <button class="btn btn-primary" *ngIf="!isEditModeEnabled" (click)="toggleEditMode()">Edit</button>
           </div>
-          <div class="mb-3 row">
-            <label for="password" class="col col-form-label"><strong>Password:</strong></label>
-            <div class="col">
-              <input type="password" readonly class="edit-input form-control-plaintext" id="password" value="***************">
-            </div>
-          </div>
-        </div>
-        <div class="flex-row align-self-end">
-          <div *ngIf="isEditModeEnabled">
-        <button class="btn btn-primary" (click)="toggleEditMode()">Cancel</button>
-        <button class="btn btn-primary">Ok</button>
-          </div>
-        <button class="btn btn-primary" *ngIf="!isEditModeEnabled" (click)="toggleEditMode()">Edit</button>
-        </div>
+
+        </form>
 
         <ul class="list-unstyled">
-          <li class="mt-5"><strong>Roles: </strong>
-            <ul>
-              <li *ngFor="let role of currentUser.roles">{{ role }}</li>
-            </ul>
+          <li class="mt-5"><strong>Role: </strong> {{ currentUser.roles[0] }}
           </li>
           <li><strong>Token: </strong>{{ currentUser.token.substring(0, 15) }} ...
             {{ currentUser.token.substr(currentUser.token.length - 15) }}
           </li>
         </ul>
+
+        <div id="successToast" class="toast align-items-center text-white bg-success border-0" role="alert"
+             aria-live="assertive" aria-atomic="true">
+          <div class="d-flex justify-content-center">
+            <div class="toast-body">
+              <div class="d-flex justify-content-center">Update successful!</div>
+            </div>
+          </div>
+        </div>
+
+        <div id="errorToast" class="toast align-items-center text-white bg-danger border-0" role="alert"
+             aria-live="assertive" aria-atomic="true">
+          <div class="d-flex justify-content-center">
+            <div class="toast-body">
+              <div class="d-flex justify-content-center">Update failed!</div>
+              <div class="d-flex justify-content-center">{{ errorMessage }}</div>
+            </div>
+          </div>
+        </div>
+
+        <div id="authorizeToast" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true">
+          <form class="toast-body" [formGroup]="authorizeGroup">
+            Enter your old username and password.
+
+            <div class="form-floating mb-3 mt-3">
+              <input type="text" class="form-control" id="username" formControlName="username" (input)="checkForm()"/>
+              <label for="username">Username</label>
+              <div class="invalid-tooltip">
+                Username is required!
+              </div>
+            </div>
+
+            <div class="form-floating mb-3">
+              <input type="password" class="form-control" id="password" formControlName="password" (input)="checkForm()"/>
+              <label for="password">Password</label>
+              <div class="invalid-tooltip">
+                Password is required
+              </div>
+            </div>
+            <div class="mt-2 pt-2 border-top">
+              <button type="button" class="btn btn-secondary btn-sm" (click)="hideAuthorizeToast()">Cancel</button>
+              <button type="button" class="btn btn-primary btn-sm" (click)="onSubmit()">Confirm</button>
+            </div>
+          </form>
+        </div>
+
       </div>
 
       <ng-template #loggedOut>

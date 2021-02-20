@@ -37,9 +37,19 @@
   width: 150px;
 }
 .edit-input:read-only {
-  padding: 7px 0 0 13px;
+  padding: 0 0 0 13px;
   border: none;
 }
 .edit-input:read-only:focus {
   outline: none ;
+}
+
+#errorToast, #successToast {
+  position: absolute;
+  top: 10%;
+}
+
+#authorizeToast {
+  position: absolute;
+  top: 30%;
 }

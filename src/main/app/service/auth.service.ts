@@ -20,4 +20,8 @@ export class AuthService {
     return this.http.post(`${AUTH_URL}/register`, { username, email, password }, HTTP_OPTIONS);
   }
 
+  public updateUser(loginRequest: any, user: any): Observable<any> {
+    return this.http.put(`${AUTH_URL}/update`, { loginRequest, user }, HTTP_OPTIONS);
+  }
+
 }

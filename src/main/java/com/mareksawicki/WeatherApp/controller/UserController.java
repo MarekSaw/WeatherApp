@@ -6,10 +6,12 @@ import com.mareksawicki.WeatherApp.exception.UserAlreadyExistsException;
 import com.mareksawicki.WeatherApp.model.JwtResponse;
 import com.mareksawicki.WeatherApp.model.LoginRequest;
 import com.mareksawicki.WeatherApp.model.MessageResponse;
+import com.mareksawicki.WeatherApp.model.UpdateRequest;
 import com.mareksawicki.WeatherApp.service.UserDetailsImpl;
 import com.mareksawicki.WeatherApp.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -63,14 +65,23 @@ public class UserController {
     return ResponseEntity.ok(new JwtResponse(jwt, userDetails.getId(), userDetails.getUsername(), userDetails.getEmail(), roles));
   }
 
-  @PutMapping
-  public ResponseEntity<?> updateUser(@RequestParam String username,
-                                      @RequestBody User user) {
-    User updatedUser = userService.updateUserByUsername(username, user);
-    return ResponseEntity.ok(updatedUser);
+  @PutMapping("/update")
+  @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+  public ResponseEntity<?> updateUser(@Valid @RequestBody UpdateRequest updateRequest) {
+    Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+        updateRequest.getLoginRequest().getUsername(), updateRequest.getLoginRequest().getPassword()));
+    SecurityContextHolder.getContext().setAuthentication(authentication);
+    User updatedUser = userService.updateUserByUsername(updateRequest.getLoginRequest().getUsername(), updateRequest.getUser());
+
+    String jwt = jwtUtils.generateJwtToken(updatedUser.getUsername());
+
+    List<String> roles = List.of(updatedUser.getRole());
+
+    return ResponseEntity.ok(new JwtResponse(jwt, updatedUser.getId(), updatedUser.getUsername(), updatedUser.getEmail(), roles));
   }
 
   @DeleteMapping
+  @PreAuthorize("hasRole('ADMIN')")
   public ResponseEntity<?> removeUser(@RequestParam String username) {
     return userService.removeUserByUsername(username) ? ResponseEntity.accepted().build() : ResponseEntity.notFound().build();
   }

@@ -74,8 +74,15 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserService {
     if (!getUserByUsername(username).getEmail().equals(user.getEmail()) && userRepository.existsByEmail(user.getEmail())) {
       throw new UserAlreadyExistsException("Given email is already taken.");
     }
-    user.setId(getUserByUsername(username).getId());
+    User updatingUser = getUserByUsername(username);
+    user.setId(updatingUser.getId());
     user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+    if (Objects.isNull(user.getRole())) {
+      user.setRole(updatingUser.getRole());
+    }
+    if (Objects.isNull(user.getEnabled())) {
+      user.setEnabled(updatingUser.getEnabled());
+    }
     return userRepository.save(user);
   }
 
