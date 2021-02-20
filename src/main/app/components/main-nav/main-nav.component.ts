@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import * as $ from 'jquery';
 import {TokenStorageService} from '../../service/token-storage.service';
+import {ObserverService} from '../../service/observer.service';
 
 @Component({
   selector: 'app-main-nav',
@@ -13,7 +14,9 @@ export class MainNavComponent implements OnInit {
   isLoggedIn: boolean;
   username: string;
 
-  constructor(private tokenStorage: TokenStorageService) { }
+  constructor(private tokenStorage: TokenStorageService, private subscriber: ObserverService) {
+    this.subscriber.usernameObservable.subscribe(value =>  this.username = value);
+  }
 
   ngOnInit(): void {
     $('.side-nav-content').hide();

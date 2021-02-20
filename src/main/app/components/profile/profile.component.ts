@@ -3,6 +3,7 @@ import {TokenStorageService} from '../../service/token-storage.service';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {AuthService} from '../../service/auth.service';
 import * as $ from 'jquery';
+import {ObserverService} from '../../service/observer.service';
 
 @Component({
   selector: 'app-profile',
@@ -35,7 +36,7 @@ export class ProfileComponent implements OnInit {
   errorMessage: string;
   isAlertActive: boolean;
 
-  constructor(private tokenStorage: TokenStorageService, private auth: AuthService) {
+  constructor(private tokenStorage: TokenStorageService, private auth: AuthService, private emitter: ObserverService) {
   }
 
   ngOnInit(): void {
@@ -136,6 +137,7 @@ export class ProfileComponent implements OnInit {
         this.tokenStorage.saveToken(data.token);
         $('#successToast').animate({opacity: '1'});
         this.isAlertActive = true;
+        this.emitter.emitUsername(data.username);
       },
       error => {
         this.errorMessage = error.error.message;
