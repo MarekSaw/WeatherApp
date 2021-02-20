@@ -2,9 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import {AuthService} from '../../service/auth.service';
 import {TokenStorageService} from '../../service/token-storage.service';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
-import * as $ from 'jquery';
-import {Router} from '@angular/router';
-
 
 @Component({
   selector: 'app-login',
@@ -23,7 +20,7 @@ export class LoginComponent implements OnInit {
   roles: string[] = [];
   username: string;
 
-  constructor(private authService: AuthService, private tokenStorage: TokenStorageService, private router: Router) { }
+  constructor(private authService: AuthService, private tokenStorage: TokenStorageService) { }
 
   ngOnInit(): void {
     this.username = this.tokenStorage.getUser().username;
@@ -65,7 +62,7 @@ export class LoginComponent implements OnInit {
   public logIn(): void {
     this.authService.login(this.loginGroup.get('username').value, this.loginGroup.get('password').value).subscribe(
       data => {
-        this.tokenStorage.saveToken(data.accessToken);
+        this.tokenStorage.saveToken(data.token);
         this.tokenStorage.saveUser(data);
 
         this.isLoginFailed = false;
