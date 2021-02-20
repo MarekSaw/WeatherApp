@@ -37,6 +37,9 @@
   border-radius: 10px;
   cursor: pointer;
 }
+.icon:focus {
+  outline: none;
+}
 .nav-icon {
   height: 24px;
   margin-right: 5px;
