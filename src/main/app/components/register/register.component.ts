@@ -47,7 +47,7 @@ export class RegisterComponent implements OnInit {
   ngOnInit(): void {
     $('.content').on('click', () => {
       if (this.isAlertActive) {
-        ($('.toast') as any).animate({opacity: '0'});
+        $('.toast').animate({opacity: '0'});
         this.isAlertActive = false;
       }
     });
@@ -58,32 +58,32 @@ export class RegisterComponent implements OnInit {
       this.register();
     } else {
       if (!this.registerGroup.get('username').valid) {
-        document.getElementById('username').classList.add('is-invalid');
+        $('#username').addClass('is-invalid');
       }
       if (!this.registerGroup.get('email').valid) {
-        document.getElementById('email').classList.add('is-invalid');
+        $('#email').addClass('is-invalid');
       }
       if (!this.registerGroup.get('password').valid) {
-        document.getElementById('password').classList.add('is-invalid');
+        $('#password').addClass('is-invalid');
       }
       if (!this.registerGroup.get('passwordConfirm').valid) {
-        document.getElementById('passwordConfirm').classList.add('is-invalid');
+        $('#passwordConfirm').addClass('is-invalid');
       }
     }
   }
 
   checkForm(): void {
     if (this.registerGroup.get('username').valid) {
-      document.getElementById('username').classList.remove('is-invalid');
+      $('#username').removeClass('is-invalid');
     }
     if (this.registerGroup.get('email').valid) {
-      document.getElementById('email').classList.remove('is-invalid');
+      $('#email').removeClass('is-invalid');
     }
     if (this.registerGroup.get('password').valid) {
-      document.getElementById('password').classList.remove('is-invalid');
+      $('#password').removeClass('is-invalid');
     }
     if (this.registerGroup.get('passwordConfirm').valid) {
-      document.getElementById('passwordConfirm').classList.remove('is-invalid');
+      $('#passwordConfirm').removeClass('is-invalid');
     }
   }
 
@@ -95,13 +95,13 @@ export class RegisterComponent implements OnInit {
         console.log(data);
         this.isSuccessful = true;
         this.isRegisterFailed = false;
-        ($('#successToast') as any).animate({opacity: '1'});
+        $('#successToast').animate({opacity: '1'});
         this.isAlertActive = true;
       },
       error => {
         this.errorMessage = error.error.message;
         this.isRegisterFailed = true;
-        ($('#errorToast') as any).animate({opacity: '1'});
+        $('#errorToast').animate({opacity: '1'});
         this.isAlertActive = true;
       }
     );

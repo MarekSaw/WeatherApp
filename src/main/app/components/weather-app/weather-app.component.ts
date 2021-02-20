@@ -49,7 +49,7 @@ export class WeatherAppComponent implements OnInit {
   ngOnInit(): void {
     $('.content').on('click', () => {
       if (this.isAlertActive) {
-        ($('.toast') as any).animate({opacity: '0'});
+        $('.toast').animate({opacity: '0'});
         this.isAlertActive = false;
       }
     });
@@ -71,7 +71,7 @@ export class WeatherAppComponent implements OnInit {
         },
         error => {
           this.isSpinnerLoadingEnabled = false;
-          ($('.toast') as any).animate({opacity: '1'});
+          $('.toast').animate({opacity: '1'});
           this.isAlertActive = true;
         });
     } else {
@@ -86,7 +86,7 @@ export class WeatherAppComponent implements OnInit {
         },
         error => {
           this.isSpinnerLoadingEnabled = false;
-          ($('.toast') as any).animate({opacity: '1'});
+          $('.toast').animate({opacity: '1'});
           this.isAlertActive = true;
         });
     }
@@ -107,16 +107,16 @@ export class WeatherAppComponent implements OnInit {
   }
 
   public goToStep(step: number): void {
-    document.getElementById(`steph${step}`).classList.add('active');
-    document.getElementById(`step${step}`).classList.add('active');
+    $(`#steph${step}`).addClass('active');
+    $(`#step${step}`).addClass('active');
   }
 
   private changeLocalizationType(): void {
     this.isCity = !this.isCity;
-    document.getElementById(`steph2`).classList.remove('active');
-    document.getElementById(`step2`).classList.remove('active');
-    document.getElementById(`steph3`).classList.remove('active');
-    document.getElementById(`step3`).classList.remove('active');
+    $(`#steph2`).removeClass('active');
+    $(`#step2`).removeClass('active');
+    $(`#steph3`).removeClass('active');
+    $(`#step3`).removeClass('active');
   }
 
   private toInputDateString(date: Date): string {

@@ -30,7 +30,7 @@ export class LoginComponent implements OnInit {
     }
     $('.content').on('click', () => {
       if (this.isAlertActive) {
-        ($('.toast') as any).animate({opacity: '0'});
+        $('.toast').animate({opacity: '0'});
         this.isAlertActive = false;
       }
     });
@@ -41,10 +41,10 @@ export class LoginComponent implements OnInit {
       this.logIn();
     } else {
       if (!this.loginGroup.get('username').valid) {
-        document.getElementById('username').classList.add('is-invalid');
+        $('#username').addClass('is-invalid');
       }
       if (!this.loginGroup.get('password').valid) {
-        document.getElementById('password').classList.add('is-invalid');
+        $('#password').addClass('is-invalid');
       }
     }
 
@@ -52,10 +52,10 @@ export class LoginComponent implements OnInit {
 
   checkForm(): void {
     if (this.loginGroup.get('username').valid) {
-      document.getElementById('username').classList.remove('is-invalid');
+      $('#username').removeClass('is-invalid');
     }
     if (this.loginGroup.get('password').valid) {
-      document.getElementById('password').classList.remove('is-invalid');
+      $('#password').removeClass('is-invalid');
     }
   }
 
@@ -74,7 +74,7 @@ export class LoginComponent implements OnInit {
       error => {
         this.errorMessage = error.error.message;
         this.isLoginFailed = true;
-        ($('#errorToast') as any).animate({opacity: '1'});
+        $('#errorToast').animate({opacity: '1'});
         this.isAlertActive = true;
       }
     );

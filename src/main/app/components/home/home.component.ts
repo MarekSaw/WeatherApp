@@ -40,7 +40,7 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
     $('.content').on('click', () => {
       if (this.isAlertActive) {
-        ($('.toast') as any).animate({opacity: '0'});
+        $('.toast').animate({opacity: '0'});
         this.isAlertActive = false;
       }
     });
@@ -61,7 +61,7 @@ export class HomeComponent implements OnInit {
         },
         error => {
           this.isSpinnerLoadingEnabled = false;
-          ($('.toast') as any).animate({opacity: '1'});
+          $('.toast').animate({opacity: '1'});
           this.isAlertActive = true;
         });
     } else {
@@ -76,7 +76,7 @@ export class HomeComponent implements OnInit {
         },
         error => {
           this.isSpinnerLoadingEnabled = false;
-          ($('.toast') as any).animate({opacity: '1'});
+          $('.toast').animate({opacity: '1'});
           this.isAlertActive = true;
         });
     }
