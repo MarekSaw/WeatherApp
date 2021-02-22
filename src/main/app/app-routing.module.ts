@@ -9,6 +9,8 @@ import {AboutComponent} from './components/about/about.component';
 import {LoginComponent} from './components/login/login.component';
 import {RegisterComponent} from './components/register/register.component';
 import {ProfileComponent} from './components/profile/profile.component';
+import {UsersComponent} from './components/users/users.component';
+import {UserResolver} from './service/user.resolver';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -18,7 +20,8 @@ const routes: Routes = [
   { path: 'about', component: AboutComponent },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
-  { path: 'profile', component: ProfileComponent }
+  { path: 'profile', component: ProfileComponent },
+  { path: 'users', component: UsersComponent, resolve: { users: UserResolver } }
 ];
 
 
