@@ -87,8 +87,17 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserService {
   }
 
   @Override
-  public boolean removeUserByUsername(String username) {
-    return userRepository.removeByUsername(username);
+  public User updateUser(User user) {
+    return userRepository.save(user);
+  }
+
+  @Override
+  public boolean removeUserById(Long id) {
+    if (userRepository.existsById(id)) {
+      userRepository.deleteById(id);
+      return true;
+    }
+    return false;
   }
 
 

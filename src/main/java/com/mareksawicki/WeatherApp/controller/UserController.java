@@ -40,6 +40,7 @@ public class UserController {
   }
 
   @GetMapping
+  @PreAuthorize("hasRole('ADMIN')")
   public ResponseEntity<?> getUser(@RequestParam(required = false) String username) {
     return Objects.nonNull(username) ? ResponseEntity.ok(userService.getUserByUsername(username)) : ResponseEntity.ok(userService.getAllUsers());
   }
@@ -66,7 +67,7 @@ public class UserController {
   }
 
   @PutMapping("/update")
-  @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+  @PreAuthorize("hasRole('USER')")
   public ResponseEntity<?> updateUser(@Valid @RequestBody UpdateRequest updateRequest) {
     Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
         updateRequest.getLoginRequest().getUsername(), updateRequest.getLoginRequest().getPassword()));
@@ -80,10 +81,22 @@ public class UserController {
     return ResponseEntity.ok(new JwtResponse(jwt, updatedUser.getId(), updatedUser.getUsername(), updatedUser.getEmail(), roles));
   }
 
-  @DeleteMapping
+  @PutMapping("/admin-update")
   @PreAuthorize("hasRole('ADMIN')")
-  public ResponseEntity<?> removeUser(@RequestParam String username) {
-    return userService.removeUserByUsername(username) ? ResponseEntity.accepted().build() : ResponseEntity.notFound().build();
+  public ResponseEntity<?> updateUserByAdmin(@Valid @RequestBody User user) {
+    User updatedUser = userService.getUserByUsername(user.getUsername());
+    updatedUser.setRole(user.getRole());
+    updatedUser.setEnabled(user.getEnabled());
+    userService.updateUser(updatedUser);
+    updatedUser.setPassword(null);
+
+    return ResponseEntity.ok(updatedUser);
+  }
+
+  @DeleteMapping("/{id}")
+  @PreAuthorize("hasRole('ADMIN')")
+  public ResponseEntity<?> removeUser(@PathVariable Long id) {
+    return userService.removeUserById(id) ? ResponseEntity.accepted().build() : ResponseEntity.notFound().build();
   }
 
 }
