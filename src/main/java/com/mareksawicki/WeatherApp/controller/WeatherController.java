@@ -2,6 +2,7 @@ package com.mareksawicki.WeatherApp.controller;
 
 import com.mareksawicki.WeatherApp.entity.WeatherForecast;
 import com.mareksawicki.WeatherApp.exception.ForecastNotFoundException;
+import com.mareksawicki.WeatherApp.service.CompoundWeatherService;
 import com.mareksawicki.WeatherApp.service.ForecastService;
 import com.mareksawicki.WeatherApp.service.WeatherService;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -18,10 +19,10 @@ import java.util.Objects;
 @RequestMapping("/weather-api")
 public class WeatherController {
 
-  private final WeatherService weatherService;
+  private final CompoundWeatherService weatherService;
   private final ForecastService forecastService;
 
-  public WeatherController(@Qualifier("compoundWeatherService") WeatherService weatherService, ForecastService forecastService) {
+  public WeatherController(@Qualifier("compoundWeatherService") CompoundWeatherService weatherService, ForecastService forecastService) {
     this.weatherService = weatherService;
     this.forecastService = forecastService;
   }
@@ -36,22 +37,34 @@ public class WeatherController {
     return ResponseEntity.ok(forecastService.getAllForecasts(page, size));
   }
 
-  @GetMapping("/forecast/count")
-  public ResponseEntity<?> getForecastsCount() {
-    return ResponseEntity.ok(forecastService.getRecordsCount());
+  @GetMapping("/weather-forecast-standard")
+  public ResponseEntity<?> getForecastsCount(@RequestParam(required = false) String city,
+                                             @RequestParam(required = false) Double lat,
+                                             @RequestParam(required = false) Double lon) {
+    WeatherForecast weatherForecast;
+    Long id = 2L;
+    if (Objects.nonNull(city)) {
+      weatherForecast = weatherService.getForecast(id, city);
+    } else if (Objects.nonNull(lat) && Objects.nonNull(lon)) {
+      weatherForecast = weatherService.getForecast(id, lat, lon);
+    } else {
+      throw new ForecastNotFoundException("One of required parameters was not given");
+    }
+    return ResponseEntity.ok(weatherForecast);
   }
 
-  @GetMapping("/weather-forecast")
+  @GetMapping("/weather-forecast/{id}")
   @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
-  public ResponseEntity<?> getWeatherForecast(@RequestParam(required = false) String city,
+  public ResponseEntity<?> getWeatherForecast(@PathVariable Long id,
+                                              @RequestParam(required = false) String city,
                                               @RequestParam(required = false) Double lat,
                                               @RequestParam(required = false) Double lon,
                                               @RequestParam(required = false) String date) {
     WeatherForecast weatherForecast;
     if (Objects.nonNull(city)) {
-      weatherForecast = Objects.nonNull(date) ? weatherService.getForecast(city, LocalDate.parse(date)) : weatherService.getForecast(city);
+      weatherForecast = Objects.nonNull(date) ? weatherService.getForecast(id, city, LocalDate.parse(date)) : weatherService.getForecast(id, city);
     } else if (Objects.nonNull(lat) && Objects.nonNull(lon)) {
-      weatherForecast = Objects.nonNull(date) ? weatherService.getForecast(lat, lon, LocalDate.parse(date)) : weatherService.getForecast(lat, lon);
+      weatherForecast = Objects.nonNull(date) ? weatherService.getForecast(id, lat, lon, LocalDate.parse(date)) : weatherService.getForecast(id, lat, lon);
     } else {
       throw new ForecastNotFoundException("One of required parameters was not given");
     }
