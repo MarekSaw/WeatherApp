@@ -6,6 +6,7 @@ import com.mareksawicki.WeatherApp.service.ForecastService;
 import com.mareksawicki.WeatherApp.service.WeatherService;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -26,6 +27,7 @@ public class WeatherController {
   }
 
   @GetMapping("/forecast")
+  @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
   public ResponseEntity<?> getAllForecasts(@RequestParam(required = false) Integer page,
                                               @RequestParam(required = false) Integer size) {
     if (Objects.isNull(page) && Objects.isNull(size)) {
@@ -40,6 +42,7 @@ public class WeatherController {
   }
 
   @GetMapping("/weather-forecast")
+  @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
   public ResponseEntity<?> getWeatherForecast(@RequestParam(required = false) String city,
                                               @RequestParam(required = false) Double lat,
                                               @RequestParam(required = false) Double lon,
@@ -56,6 +59,7 @@ public class WeatherController {
   }
 
   @DeleteMapping("/forecast/{id}")
+  @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
   public ResponseEntity<?> deleteForecast(@PathVariable Long id) {
     return forecastService.removeForecastById(id) ? ResponseEntity.accepted().build() : ResponseEntity.notFound().build();
   }
