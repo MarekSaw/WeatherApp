@@ -2,11 +2,10 @@ package com.mareksawicki.WeatherApp.controller;
 
 import com.mareksawicki.WeatherApp.config.jwt.JwtUtils;
 import com.mareksawicki.WeatherApp.entity.User;
-import com.mareksawicki.WeatherApp.exception.UserAlreadyExistsException;
 import com.mareksawicki.WeatherApp.model.JwtResponse;
 import com.mareksawicki.WeatherApp.model.LoginRequest;
-import com.mareksawicki.WeatherApp.model.MessageResponse;
 import com.mareksawicki.WeatherApp.model.UpdateRequest;
+import com.mareksawicki.WeatherApp.repository.UserRepository;
 import com.mareksawicki.WeatherApp.service.UserDetailsImpl;
 import com.mareksawicki.WeatherApp.service.UserService;
 import org.springframework.http.HttpStatus;
@@ -30,11 +29,13 @@ import java.util.stream.Collectors;
 public class UserController {
 
   private final UserService userService;
+  private final UserRepository userRepository;
   private final AuthenticationManager authenticationManager;
   private final JwtUtils jwtUtils;
 
-  public UserController(UserService userService, AuthenticationManager authenticationManager, JwtUtils jwtUtils) {
+  public UserController(UserService userService, UserRepository userRepository, AuthenticationManager authenticationManager, JwtUtils jwtUtils) {
     this.userService = userService;
+    this.userRepository = userRepository;
     this.authenticationManager = authenticationManager;
     this.jwtUtils = jwtUtils;
   }
@@ -83,8 +84,8 @@ public class UserController {
 
   @PutMapping("/admin-update")
   @PreAuthorize("hasRole('ADMIN')")
-  public ResponseEntity<?> updateUserByAdmin(@Valid @RequestBody User user) {
-    User updatedUser = userService.getUserByUsername(user.getUsername());
+  public ResponseEntity<?> updateUserByAdmin(@RequestBody User user) {
+    User updatedUser = userRepository.findByUsername(user.getUsername());
     updatedUser.setRole(user.getRole());
     updatedUser.setEnabled(user.getEnabled());
     userService.updateUser(updatedUser);
