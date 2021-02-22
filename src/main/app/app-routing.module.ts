@@ -15,7 +15,7 @@ import {UserResolver} from './service/user.resolver';
 const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'weather-app', component: WeatherAppComponent },
-  { path: 'forecasts', component: ForecastsComponent, resolve: { forecasts: ForecastResolver } },
+  { path: 'forecasts', component: ForecastsComponent },
   { path: 'contact', component: ContactComponent },
   { path: 'about', component: AboutComponent },
   { path: 'login', component: LoginComponent },
