@@ -12,6 +12,7 @@ import {TokenStorageService} from '../../service/token-storage.service';
 export class WeatherAppComponent implements OnInit {
 
   isLoggedIn: boolean;
+  currentUser: any;
   cityName: string;
   weatherForecast: WeatherForecastModel;
   isCity = true;
@@ -50,6 +51,7 @@ export class WeatherAppComponent implements OnInit {
 
   ngOnInit(): void {
     this.isLoggedIn = !!this.tokenStorage.getToken();
+    this.currentUser = this.tokenStorage.getUser();
     $('.content').on('click', () => {
       if (this.isAlertActive) {
         $('.toast').animate({opacity: '0'});
@@ -66,7 +68,7 @@ export class WeatherAppComponent implements OnInit {
     const date = this.weatherGroup.get('date').value;
     if (this.isCity) {
       this.weatherLocation = this.weatherGroup.get('city').value;
-      this.weatherForecastService.findWeatherForCityWithDate(this.weatherLocation, date).subscribe(
+      this.weatherForecastService.findWeatherForCityWithDate(this.currentUser.id, this.weatherLocation, date).subscribe(
         value => {
           this.weatherForecast = value;
           this.loadDataToModal();
@@ -81,7 +83,7 @@ export class WeatherAppComponent implements OnInit {
       const lat = this.weatherGroup.get('latitude').value;
       const lon = this.weatherGroup.get('longitude').value;
       this.weatherLocation = `lat: ${lat.toFixed(3)}, lon: ${lon.toFixed(3)}`;
-      this.weatherForecastService.findWeatherForCoordinatesWithDate(lat, lon, date).subscribe(
+      this.weatherForecastService.findWeatherForCoordinatesWithDate(this.currentUser.id, lat, lon, date).subscribe(
         value => {
           this.weatherForecast = value;
           this.loadDataToModal();
