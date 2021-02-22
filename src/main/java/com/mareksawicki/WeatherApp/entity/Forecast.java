@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Entity
 @Data
@@ -24,5 +25,8 @@ public class Forecast {
   private String localization;
   private LocalDate forecastDate;
   private LocalDateTime forecastAcquiredDate;
+
+  @ManyToMany(mappedBy = "forecasts")
+  private Set<User> users;
 
 }
