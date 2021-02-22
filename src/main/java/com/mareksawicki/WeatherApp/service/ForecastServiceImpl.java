@@ -3,6 +3,7 @@ package com.mareksawicki.WeatherApp.service;
 import com.mareksawicki.WeatherApp.entity.Forecast;
 import com.mareksawicki.WeatherApp.exception.WrongPageException;
 import com.mareksawicki.WeatherApp.repository.ForecastRepository;
+import com.mareksawicki.WeatherApp.repository.UserRepository;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -15,9 +16,11 @@ import java.util.Objects;
 public class ForecastServiceImpl implements ForecastService {
 
   private final ForecastRepository forecastRepository;
+  private final UserRepository userRepository;
 
-  public ForecastServiceImpl(ForecastRepository forecastRepository) {
+  public ForecastServiceImpl(ForecastRepository forecastRepository, UserRepository userRepository) {
     this.forecastRepository = forecastRepository;
+    this.userRepository = userRepository;
   }
 
   @Override
@@ -42,16 +45,16 @@ public class ForecastServiceImpl implements ForecastService {
   }
 
   @Override
+  public List<Forecast> getAllForecastsByUserId(Long userId) {
+    return forecastRepository.findAllByUsersContaining(userRepository.findById(userId).orElseThrow());
+  }
+
+  @Override
   public boolean removeForecastById(Long id) {
     if (forecastRepository.existsById(id)) {
       forecastRepository.deleteById(id);
       return true;
     }
     return false;
-  }
-
-  @Override
-  public Long getRecordsCount() {
-    return forecastRepository.count();
   }
 }

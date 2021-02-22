@@ -28,17 +28,23 @@ public class WeatherController {
   }
 
   @GetMapping("/forecast")
-  @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+  @PreAuthorize("hasRole('ADMIN')")
   public ResponseEntity<?> getAllForecasts(@RequestParam(required = false) Integer page,
-                                              @RequestParam(required = false) Integer size) {
+                                           @RequestParam(required = false) Integer size) {
     if (Objects.isNull(page) && Objects.isNull(size)) {
       return ResponseEntity.ok(forecastService.getAllForecasts());
     }
     return ResponseEntity.ok(forecastService.getAllForecasts(page, size));
   }
 
+  @GetMapping("/forecast/{id}")
+  @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+  public ResponseEntity<?> getAllForecastsForUser(@PathVariable Long id) {
+    return ResponseEntity.ok(forecastService.getAllForecastsByUserId(id));
+  }
+
   @GetMapping("/weather-forecast-standard")
-  public ResponseEntity<?> getForecastsCount(@RequestParam(required = false) String city,
+  public ResponseEntity<?> getForecastsStandard(@RequestParam(required = false) String city,
                                              @RequestParam(required = false) Double lat,
                                              @RequestParam(required = false) Double lon) {
     WeatherForecast weatherForecast;
