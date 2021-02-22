@@ -15,18 +15,18 @@ export class WeatherForecastService {
   }
 
   public findWeatherForCity(city: string): Observable<WeatherForecastModel> {
-    return this.http.get<WeatherForecastModel>(`${this.url}?city=${city}`);
+    return this.http.get<WeatherForecastModel>(`${this.url}-standard?city=${city}`);
   }
 
   public findWeatherForCoordinates(latitude: number, longitude: number): Observable<WeatherForecastModel> {
-    return this.http.get<WeatherForecastModel>(`${this.url}?lat=${latitude}&lon=${longitude}`);
+    return this.http.get<WeatherForecastModel>(`${this.url}-standard?lat=${latitude}&lon=${longitude}`);
   }
 
-  public findWeatherForCityWithDate(city: string, date: string): Observable<WeatherForecastModel> {
-    return this.http.get<WeatherForecastModel>(`${this.url}?city=${city}&date=${date}`);
+  public findWeatherForCityWithDate(userId: number, city: string, date: string): Observable<WeatherForecastModel> {
+    return this.http.get<WeatherForecastModel>(`${this.url}/${userId}?city=${city}&date=${date}`);
   }
 
-  public findWeatherForCoordinatesWithDate(latitude: number, longitude: number, date: string): Observable<WeatherForecastModel> {
-    return this.http.get<WeatherForecastModel>(`${this.url}?lat=${latitude}&lon=${longitude}&date=${date}`);
+  public findWeatherForCoordinatesWithDate(userId: number, latitude: number, longitude: number, date: string): Observable<WeatherForecastModel> {
+    return this.http.get<WeatherForecastModel>(`${this.url}/${userId}?lat=${latitude}&lon=${longitude}&date=${date}`);
   }
 }

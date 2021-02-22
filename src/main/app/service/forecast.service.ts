@@ -22,8 +22,8 @@ export class ForecastService {
     return this.http.get<ForecastModel[]>(`${this.url}`);
   }
 
-  public getForecastsCount(): Observable<number> {
-    return this.http.get<number>(`${this.url}/count`);
+  public getAllForecastsByUserId(userId: number): Observable<ForecastModel[]> {
+    return this.http.get<ForecastModel[]>(`${this.url}/${userId}`);
   }
 
   public deleteForecast(id: number): Observable<any> {
