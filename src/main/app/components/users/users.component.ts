@@ -17,11 +17,21 @@ export class UsersComponent implements OnInit {
   totalPages: number;
   pageList: number[];
   pageSize = 10;
+  userToUpdate: UserModel = { id: null, username: null, email: null, password: null, role: null, enabled: null };
+  errorMessage: string;
+  isAlertActive: boolean;
   isSpinnerDeletingEnabled: boolean;
+  isSpinnerEditingEnabled: boolean;
 
   constructor(private userService: UserService, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
+    $('.content').on('click', () => {
+      if (this.isAlertActive) {
+        $('.toast').animate({opacity: '0'}).addClass('hide');
+        this.isAlertActive = false;
+      }
+    });
     this.userList = this.route.snapshot.data.users;
     if (this.userList.length !== 0) {
       this.actualPage = 1;
@@ -38,7 +48,34 @@ export class UsersComponent implements OnInit {
     window.scrollTo(0, 0);
   }
 
-  public deleteUser(id: number): void {
+  showEditModal(username: string): void {
+    this.userToUpdate.username = username;
+    ($('#editModal') as any).modal('show');
+  }
+
+  updateUser(): void {
+    this.isSpinnerEditingEnabled = true;
+    this.loadEditProperties();
+    console.log(this.userToUpdate);
+    this.userService.updateUserByAdmin(this.userToUpdate).subscribe(value => {
+      this.userService.getUserList().subscribe(
+        users => {
+        this.userList = users;
+        this.getPageList(this.pageSize);
+        this.getListForPage(this.actualPage, this.pageSize);
+        this.isSpinnerEditingEnabled = false;
+        this.successEdit();
+      },
+        error => {
+          this.errorMessage = error.error.message;
+          this.isSpinnerEditingEnabled = false;
+          $('#errorToast').animate({opacity: '1'}).removeClass('hide');
+          this.isAlertActive = true;
+        });
+    });
+  }
+
+  deleteUser(id: number): void {
     this.isSpinnerDeletingEnabled = true;
     this.userService.deleteUserByAdmin(id).subscribe(() => {
       this.userService.getUserList().subscribe(users => {
@@ -55,6 +92,27 @@ export class UsersComponent implements OnInit {
         this.isSpinnerDeletingEnabled = false;
       });
     });
+  }
+
+  private successEdit(): void {
+    ($('#editModal') as any).modal('hide');
+    $('#successToast').animate({opacity: '1'}).removeClass('hide');
+    this.isAlertActive = true;
+  }
+
+  private loadEditProperties(): void {
+    switch ($('#role').val()) {
+      case '1':
+        this.userToUpdate.role = 'ROLE_USER';
+        break;
+      case '2':
+        this.userToUpdate.role = 'ROLE_MODERATOR';
+        break;
+      case '3':
+        this.userToUpdate.role = 'ROLE_ADMIN';
+        break;
+    }
+    this.userToUpdate.enabled = $('#enabled').val() === '1';
   }
 
   private getListForPage(page: number, size: number): void {

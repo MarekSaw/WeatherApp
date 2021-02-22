@@ -2,54 +2,118 @@
   <div class="custom-container" *ngIf="isUserListEmpty">
     <p>User list is empty.</p>
   </div>
-</div>
 
-<div class="container pt-5 pb-5" *ngIf="!isUserListEmpty">
-  <table class="table table-hover table-light table-striped align-middle">
-    <thead>
-    <tr>
-      <th scope="col">ID</th>
-      <th scope="col">Username</th>
-      <th scope="col">Email</th>
-      <th scope="col">Role</th>
-      <th scope="col">Enabled</th>
-      <th scope="col"></th>
-      <th scope="col"></th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr *ngFor="let user of userListPage">
-      <th>{{user.id}}</th>
-      <td>{{user.username}}</td>
-      <td>{{user.email}}</td>
-      <td>{{user.role}}</td>
-      <td>{{user.enabled}}</td>
-      <td>
-        <button class="btn btn-primary">Edit</button>
-      </td>
-      <td>
-        <button class="btn btn-danger" (click)="deleteUser(user.id)">
+
+  <div class="container pt-5 pb-5 align-items-center" *ngIf="!isUserListEmpty">
+    <table class="table table-hover table-light table-striped align-middle">
+      <thead>
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Username</th>
+        <th scope="col">Email</th>
+        <th scope="col">Role</th>
+        <th scope="col">Enabled</th>
+        <th scope="col"></th>
+        <th scope="col"></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let user of userListPage">
+        <th>{{user.id}}</th>
+        <td>{{user.username}}</td>
+        <td>{{user.email}}</td>
+        <td>{{user.role}}</td>
+        <td>{{user.enabled}}</td>
+        <td>
+          <button class="btn btn-primary" (click)="showEditModal(user.username)">Edit</button>
+        </td>
+        <td>
+          <button class="btn btn-danger" (click)="deleteUser(user.id)">
           <span class="spinner-border spinner-border-sm" role="status" *ngIf="isSpinnerDeletingEnabled">
           </span>
-          Delete
-        </button>
-      </td>
-    </tr>
-    </tbody>
-  </table>
+            Delete
+          </button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
 
-  <nav aria-label="Page navigation example">
-    <ul class="pagination justify-content-center">
-      <li [classList]="actualPage === 1 ? 'page-item disabled' : 'page-item'">
-        <a class="page-link" tabindex="-1" (click)="getPage(actualPage - 1)">Previous</a>
-      </li>
-      <li [classList]="actualPage === page + 1 ? 'page-item active' : 'page-item'" *ngFor="let page of pageList">
-        <a class="page-link" (click)="getPage(page + 1)">{{page + 1}}</a></li>
-      <li [classList]="actualPage === totalPages ? 'page-item disabled' : 'page-item'">
-        <a class="page-link" (click)="getPage(actualPage + 1)">Next</a>
-      </li>
-    </ul>
-  </nav>
+    <div class="modal fade" id="editModal" tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5>Edit window</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body d-flex flex-column align-items-center">
+
+            <div class="form-floating modal-box mb-3 mt-3">
+              <input type="text" class="form-control" id="username" readonly [value]="userToUpdate.username"/>
+              <label for="username">Username</label>
+            </div>
+
+            <div class="input-group modal-box mb-3">
+              <label class="input-group-text" for="role">Role</label>
+              <select class="form-select" id="role">
+                <option value="1">USER</option>
+                <option value="2">MODERATOR</option>
+                <option value="3">ADMIN</option>
+              </select>
+            </div>
+
+            <div class="input-group modal-box mb-3">
+              <label class="input-group-text" for="enabled">Enabled</label>
+              <select class="form-select" id="enabled">
+                <option value="1">true</option>
+                <option value="2">false</option>
+              </select>
+            </div>
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" (click)="updateUser()">
+              <span class="spinner-border spinner-border-sm" role="status" *ngIf="isSpinnerEditingEnabled">
+          </span>
+              Confirm
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="successToast" class="toast align-items-center text-white bg-success border-0" role="alert"
+         aria-live="assertive" aria-atomic="true">
+      <div class="d-flex justify-content-center">
+        <div class="toast-body">
+          <div class="d-flex justify-content-center">Update successful!</div>
+        </div>
+      </div>
+    </div>
+
+    <div id="errorToast" class="toast align-items-center text-white bg-danger border-0" role="alert"
+         aria-live="assertive" aria-atomic="true">
+      <div class="d-flex justify-content-center">
+        <div class="toast-body">
+          <div class="d-flex justify-content-center">Update failed!</div>
+          <div class="d-flex justify-content-center">{{ errorMessage }}</div>
+        </div>
+      </div>
+    </div>
+
+    <nav aria-label="Page navigation">
+      <ul class="pagination justify-content-center">
+        <li [classList]="actualPage === 1 ? 'page-item disabled' : 'page-item'">
+          <a class="page-link" tabindex="-1" (click)="getPage(actualPage - 1)">Previous</a>
+        </li>
+        <li [classList]="actualPage === page + 1 ? 'page-item active' : 'page-item'" *ngFor="let page of pageList">
+          <a class="page-link" (click)="getPage(page + 1)">{{page + 1}}</a></li>
+        <li [classList]="actualPage === totalPages ? 'page-item disabled' : 'page-item'">
+          <a class="page-link" (click)="getPage(actualPage + 1)">Next</a>
+        </li>
+      </ul>
+    </nav>
+
+  </div>
 
 </div>
-

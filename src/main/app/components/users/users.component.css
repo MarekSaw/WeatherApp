@@ -3,3 +3,17 @@
   justify-content: center;
   align-content: center;
 }
+
+.modal-box {
+  width: 250px;
+}
+
+.input-group-text {
+  width: 80px;
+}
+
+.toast {
+  position: absolute;
+  top: 10%;
+  left: calc(50% - 175px);
+}

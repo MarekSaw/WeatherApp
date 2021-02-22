@@ -30,8 +30,9 @@ export class UserService {
   }
 
   public updateUserByAdmin(user: UserModel): Observable<UserModel> {
-    return this.http.put<UserModel>(`${AUTH_URL}/admin-update`, { user }, HTTP_OPTIONS);
+    return this.http.put<UserModel>(`${AUTH_URL}/admin-update`, user);
   }
+
 
   public deleteUserByAdmin(id: number): Observable<any> {
     return this.http.delete<any>(`${AUTH_URL}/${id}`, HTTP_OPTIONS);
