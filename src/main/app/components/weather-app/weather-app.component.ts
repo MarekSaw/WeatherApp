@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {WeatherForecastModel} from '../model/WeatherForecastModel';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {WeatherForecastService} from '../../service/weather-forecast.service';
+import {TokenStorageService} from '../../service/token-storage.service';
 
 @Component({
   selector: 'app-weather-app',
@@ -10,6 +11,7 @@ import {WeatherForecastService} from '../../service/weather-forecast.service';
 })
 export class WeatherAppComponent implements OnInit {
 
+  isLoggedIn: boolean;
   cityName: string;
   weatherForecast: WeatherForecastModel;
   isCity = true;
@@ -42,11 +44,12 @@ export class WeatherAppComponent implements OnInit {
   weatherParametersModal: WeatherForecastModel = {temperature: 0, pressure: 0, humidity: 0, windSpeed: 0, windDeg: 0};
   isAlertActive: boolean;
 
-  constructor(private formBuilder: FormBuilder, private weatherForecastService: WeatherForecastService) {
+  constructor(private tokenStorage: TokenStorageService, private formBuilder: FormBuilder, private weatherForecastService: WeatherForecastService) {
 
   }
 
   ngOnInit(): void {
+    this.isLoggedIn = !!this.tokenStorage.getToken();
     $('.content').on('click', () => {
       if (this.isAlertActive) {
         $('.toast').animate({opacity: '0'});

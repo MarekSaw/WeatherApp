@@ -1,6 +1,10 @@
 <div class="content">
-  <div class="app-content">
-    <div class="welcome-container">
+  <div class="custom-container" *ngIf="!isLoggedIn">
+    <h3>Access denied!</h3>
+    <p>Login for extended weather checking.</p>
+  </div>
+  <div class="app-content" *ngIf="isLoggedIn">
+    <div class="custom-container">
 
       <div id="stepper" class="bs-stepper vertical linear">
 

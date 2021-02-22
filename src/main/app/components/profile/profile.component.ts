@@ -11,6 +11,8 @@ import {ObserverService} from '../../service/observer.service';
   styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent implements OnInit {
+
+  isLoggedIn: boolean;
   currentUser: any;
   isEditModeEnabled: boolean;
 
@@ -47,6 +49,7 @@ export class ProfileComponent implements OnInit {
         this.isAlertActive = false;
       }
     });
+    this.isLoggedIn = !!this.tokenStorage.getToken();
     this.currentUser = this.tokenStorage.getUser();
     this.updateGroup.get('newUsername').setValue(this.currentUser.username);
     this.updateGroup.get('newEmail').setValue(this.currentUser.email);

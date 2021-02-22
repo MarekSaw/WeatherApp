@@ -1,6 +1,9 @@
 <div class="content">
-  <div class="app-content">
-    <div class="container">
+  <div class="custom-container" *ngIf="!isLoggedIn">
+    <p>Login to see your profile.</p>
+  </div>
+  <div class="app-content" *ngIf="isLoggedIn">
+    <div class="custom-container">
 
       <div class="profile-container" *ngIf="currentUser; else loggedOut">
         <img class="mb-5" src="main/assets/icons/profile.png" alt="">
