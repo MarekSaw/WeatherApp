@@ -13,6 +13,7 @@ export class MainNavComponent implements OnInit {
 
   isSideNavOpen: boolean;
   isLoggedIn: boolean;
+  isAdminLoggedIn: boolean;
   username: string;
 
   constructor(private tokenStorage: TokenStorageService, private subscriber: ObserverService, private router: Router) {
@@ -30,6 +31,7 @@ export class MainNavComponent implements OnInit {
     this.isLoggedIn = !!this.tokenStorage.getToken();
     if (this.isLoggedIn) {
       const user = this.tokenStorage.getUser();
+      this.isAdminLoggedIn = user.roles.includes('ROLE_ADMIN');
       this.username = user.username;
     }
   }
