@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {AuthService} from '../../service/auth.service';
+import {UserService} from '../../service/user.service';
 import {TokenStorageService} from '../../service/token-storage.service';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 
@@ -20,7 +20,7 @@ export class LoginComponent implements OnInit {
   roles: string[] = [];
   username: string;
 
-  constructor(private authService: AuthService, private tokenStorage: TokenStorageService) { }
+  constructor(private authService: UserService, private tokenStorage: TokenStorageService) { }
 
   ngOnInit(): void {
     this.username = this.tokenStorage.getUser().username;

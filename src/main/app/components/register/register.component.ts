@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {AuthService} from '../../service/auth.service';
+import {UserService} from '../../service/user.service';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import * as $ from 'jquery';
 import {Router} from '@angular/router';
@@ -41,7 +41,7 @@ export class RegisterComponent implements OnInit {
   errorMessage = '';
 
 
-  constructor(private authService: AuthService, private router: Router) {
+  constructor(private authService: UserService, private router: Router) {
   }
 
   ngOnInit(): void {

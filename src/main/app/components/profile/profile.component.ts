@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {TokenStorageService} from '../../service/token-storage.service';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {AuthService} from '../../service/auth.service';
+import {UserService} from '../../service/user.service';
 import * as $ from 'jquery';
 import {ObserverService} from '../../service/observer.service';
 
@@ -36,7 +36,7 @@ export class ProfileComponent implements OnInit {
   errorMessage: string;
   isAlertActive: boolean;
 
-  constructor(private tokenStorage: TokenStorageService, private auth: AuthService, private emitter: ObserverService) {
+  constructor(private tokenStorage: TokenStorageService, private auth: UserService, private emitter: ObserverService) {
   }
 
   ngOnInit(): void {
