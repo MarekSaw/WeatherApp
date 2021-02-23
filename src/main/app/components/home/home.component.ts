@@ -49,9 +49,6 @@ export class HomeComponent implements OnInit {
         this.isAlertActive = false;
       }
     });
-    $('.select').on('change', () => {
-      this.isCity = !this.isCity;
-    });
   }
 
   public findWeather(): void {
@@ -97,6 +94,10 @@ export class HomeComponent implements OnInit {
           });
       }
     }
+  }
+
+  changeLocalizationType(): void {
+    this.isCity = !this.isCity;
   }
 
   private searchWeatherSuccess(value: any): void {

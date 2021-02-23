@@ -46,7 +46,6 @@ export class WeatherAppComponent implements OnInit {
   isAlertActive: boolean;
 
   constructor(private tokenStorage: TokenStorageService, private formBuilder: FormBuilder, private weatherForecastService: WeatherForecastService) {
-
   }
 
   ngOnInit(): void {
@@ -58,9 +57,7 @@ export class WeatherAppComponent implements OnInit {
         this.isAlertActive = false;
       }
     });
-    $('.select').on('change', () => {
-      this.changeLocalizationType();
-    });
+
   }
 
   public findWeather(): void {
@@ -116,7 +113,7 @@ export class WeatherAppComponent implements OnInit {
     $(`#step${step}`).addClass('active');
   }
 
-  private changeLocalizationType(): void {
+  changeLocalizationType(): void {
     this.isCity = !this.isCity;
     $(`#steph2`).removeClass('active');
     $(`#step2`).removeClass('active');
