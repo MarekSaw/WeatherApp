@@ -24,7 +24,7 @@
             </button>
           </div>
           <div class="bs-stepper-line"></div>
-          <div class="step" id="steph3" data-target="#step3">
+          <div class="step" id="steph3" data-target="#step3" #step3>
             <button type="button" class="step-trigger" role="tab" (click)="goToStep(3)"
                     [disabled]="!weatherGroup.get('city').valid && isCity || !(weatherGroup.get('latitude').valid && weatherGroup.get('longitude').valid) && !isCity || !weatherGroup.get('date').valid || !isDateValid()">
               <span class="bs-stepper-circle">3</span>
@@ -34,7 +34,7 @@
         </div>
         <div class="bs-stepper-content">
           <form [formGroup]="weatherGroup"
-                (ngSubmit)="findWeather()">
+                (ngSubmit)="step3.classList.contains('active') && findWeather()">
 
             <!--STEP 1.-->
 
@@ -120,7 +120,7 @@
 
             <div id="step3" role="tabpanel" class="bs-stepper-pane fade dstepper-block justify-content-center">
               <p>Ready to check.</p>
-              <button type="submit" class="btn btn-primary">
+              <button type="submit" class="btn btn-primary" id="check-button">
                 <span class="spinner-border spinner-border-sm" role="status" *ngIf="isSpinnerLoadingEnabled">
                 </span>
                 Check
