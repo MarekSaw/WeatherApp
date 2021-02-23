@@ -11,6 +11,7 @@ import {RegisterComponent} from './components/register/register.component';
 import {ProfileComponent} from './components/profile/profile.component';
 import {UsersComponent} from './components/users/users.component';
 import {UserResolver} from './service/user.resolver';
+import {PageNotFoundComponent} from './components/page-not-found/page-not-found.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -21,7 +22,9 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'profile', component: ProfileComponent },
-  { path: 'users', component: UsersComponent, resolve: { users: UserResolver } }
+  { path: 'users', component: UsersComponent, resolve: { users: UserResolver } },
+  { path: 'page-not-found', component: PageNotFoundComponent },
+  { path: '**', redirectTo: 'page-not-found' }
 ];
 
 

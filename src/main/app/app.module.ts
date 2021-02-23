@@ -17,6 +17,7 @@ import {authInterceptorProviders} from './service/auth.interceptor';
 import { RegisterComponent } from './components/register/register.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { UsersComponent } from './components/users/users.component';
+import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { UsersComponent } from './components/users/users.component';
     LoginComponent,
     RegisterComponent,
     ProfileComponent,
-    UsersComponent
+    UsersComponent,
+    PageNotFoundComponent
   ],
   imports: [
     BrowserModule,
