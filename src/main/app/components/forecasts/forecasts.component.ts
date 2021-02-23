@@ -13,7 +13,7 @@ export class ForecastsComponent implements OnInit {
 
   currentUser: any;
   isAdminLoggedIn: boolean;
-  noForecastList: boolean;
+  isForecastListAvailable: boolean;
   forecastList: ForecastModel[];
   forecastListPage: ForecastModel[] = [];
   actualPage: number;
@@ -22,12 +22,14 @@ export class ForecastsComponent implements OnInit {
   pageSize = 10;
   weatherLocation = '';
   weatherParametersModal: WeatherForecastModel = {temperature: 0, pressure: 0, humidity: 0, windSpeed: 0, windDeg: 0};
+  isLoadingSpinnerEnabled: boolean;
   isSpinnerDeletingEnabled: boolean;
 
   constructor(private tokenStorage: TokenStorageService, private forecastService: ForecastService) {
   }
 
   ngOnInit(): void {
+    this.isLoadingSpinnerEnabled = true;
     this.currentUser = this.tokenStorage.getUser();
     this.isAdminLoggedIn = this.currentUser.roles.includes('ROLE_ADMIN');
     if (this.isAdminLoggedIn) {
@@ -37,9 +39,9 @@ export class ForecastsComponent implements OnInit {
           this.actualPage = 1;
           this.getPageList(this.pageSize);
           this.getListForPage(this.actualPage, this.pageSize);
-        } else {
-          this.noForecastList = true;
+          this.isForecastListAvailable = true;
         }
+        this.isLoadingSpinnerEnabled = false;
       });
     } else {
       this.forecastService.getAllForecastsByUserId(this.currentUser.id).subscribe(value => {
@@ -48,9 +50,9 @@ export class ForecastsComponent implements OnInit {
           this.actualPage = 1;
           this.getPageList(this.pageSize);
           this.getListForPage(this.actualPage, this.pageSize);
-        } else {
-          this.noForecastList = true;
+          this.isForecastListAvailable = true;
         }
+        this.isLoadingSpinnerEnabled = false;
       });
     }
   }
@@ -69,7 +71,7 @@ export class ForecastsComponent implements OnInit {
           this.forecastList = forecasts;
           this.getPageList(this.pageSize);
           if (this.totalPages === 0) {
-            this.noForecastList = true;
+            this.isForecastListAvailable = false;
           }
           if (this.actualPage > this.totalPages) {
             this.getPage(1);
@@ -83,7 +85,7 @@ export class ForecastsComponent implements OnInit {
           this.forecastList = forecasts;
           this.getPageList(this.pageSize);
           if (this.totalPages === 0) {
-            this.noForecastList = true;
+            this.isForecastListAvailable = false;
           }
           if (this.actualPage > this.totalPages) {
             this.getPage(1);

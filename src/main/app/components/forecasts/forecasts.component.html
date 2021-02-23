@@ -1,11 +1,16 @@
+<div class="loading-spinner custom-spinner" *ngIf="isLoadingSpinnerEnabled">
+  <div class="spinner-border custom-spinner-border" role="status">
+  </div>
+</div>
+
 <div class="content">
-  <div class="welcome-container" *ngIf="noForecastList">
+  <div class="welcome-container" *ngIf="!isForecastListAvailable && !isLoadingSpinnerEnabled">
     <p>Your forecast list is empty.</p>
      <p>Search for ones to view history.</p>
   </div>
 
 
-<div class="container pt-5 pb-5" *ngIf="!noForecastList">
+<div class="container pt-5 pb-5" *ngIf="isForecastListAvailable">
   <table class="table table-hover table-light table-striped align-middle">
     <thead>
     <tr>
