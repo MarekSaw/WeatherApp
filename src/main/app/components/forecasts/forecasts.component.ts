@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {ForecastService} from '../../service/forecast.service';
 import {ForecastModel} from '../model/ForecastModel';
 import {WeatherForecastModel} from '../model/WeatherForecastModel';
-import {ActivatedRoute} from '@angular/router';
+import {TokenStorageService} from '../../service/token-storage.service';
 
 @Component({
   selector: 'app-forecasts',
@@ -11,6 +11,8 @@ import {ActivatedRoute} from '@angular/router';
 })
 export class ForecastsComponent implements OnInit {
 
+  currentUser: any;
+  isAdminLoggedIn: boolean;
   noForecastList: boolean;
   forecastList: ForecastModel[];
   forecastListPage: ForecastModel[] = [];
@@ -22,19 +24,35 @@ export class ForecastsComponent implements OnInit {
   weatherParametersModal: WeatherForecastModel = {temperature: 0, pressure: 0, humidity: 0, windSpeed: 0, windDeg: 0};
   isSpinnerDeletingEnabled: boolean;
 
-  constructor(private forecastService: ForecastService, private router: ActivatedRoute) {
+  constructor(private tokenStorage: TokenStorageService, private forecastService: ForecastService) {
   }
 
   ngOnInit(): void {
-    this.forecastList = this.router.snapshot.data.forecasts;
-    if (this.forecastList.length !== 0) {
-      this.actualPage = 1;
-      this.getPageList(this.pageSize);
-      this.getListForPage(this.actualPage, this.pageSize);
+    this.currentUser = this.tokenStorage.getUser();
+    this.isAdminLoggedIn = this.currentUser.roles.includes('ROLE_ADMIN');
+    if (this.isAdminLoggedIn) {
+      this.forecastService.getAllForecasts().subscribe(value => {
+        this.forecastList = value;
+        if (this.forecastList.length !== 0) {
+          this.actualPage = 1;
+          this.getPageList(this.pageSize);
+          this.getListForPage(this.actualPage, this.pageSize);
+        } else {
+          this.noForecastList = true;
+        }
+      });
     } else {
-      this.noForecastList = true;
+      this.forecastService.getAllForecastsByUserId(this.currentUser.id).subscribe(value => {
+        this.forecastList = value;
+        if (this.forecastList.length !== 0) {
+          this.actualPage = 1;
+          this.getPageList(this.pageSize);
+          this.getListForPage(this.actualPage, this.pageSize);
+        } else {
+          this.noForecastList = true;
+        }
+      });
     }
-
   }
 
   public getPage(page: number): void {
@@ -46,19 +64,35 @@ export class ForecastsComponent implements OnInit {
   public deleteForecast(id: number): void {
     this.isSpinnerDeletingEnabled = true;
     this.forecastService.deleteForecast(id).subscribe(() => {
-      this.forecastService.getAllForecasts().subscribe(forecasts => {
-        this.forecastList = forecasts;
-        this.getPageList(this.pageSize);
-        if (this.totalPages === 0) {
-          this.noForecastList = true;
-        }
-        if (this.actualPage > this.totalPages) {
-          this.getPage(1);
-        } else {
-          this.getPage(this.actualPage);
-        }
-        this.isSpinnerDeletingEnabled = false;
-      });
+      if (this.isAdminLoggedIn) {
+        this.forecastService.getAllForecasts().subscribe(forecasts => {
+          this.forecastList = forecasts;
+          this.getPageList(this.pageSize);
+          if (this.totalPages === 0) {
+            this.noForecastList = true;
+          }
+          if (this.actualPage > this.totalPages) {
+            this.getPage(1);
+          } else {
+            this.getPage(this.actualPage);
+          }
+          this.isSpinnerDeletingEnabled = false;
+        });
+      } else {
+        this.forecastService.getAllForecastsByUserId(this.currentUser.id).subscribe(forecasts => {
+          this.forecastList = forecasts;
+          this.getPageList(this.pageSize);
+          if (this.totalPages === 0) {
+            this.noForecastList = true;
+          }
+          if (this.actualPage > this.totalPages) {
+            this.getPage(1);
+          } else {
+            this.getPage(this.actualPage);
+          }
+          this.isSpinnerDeletingEnabled = false;
+        });
+      }
     });
   }
 

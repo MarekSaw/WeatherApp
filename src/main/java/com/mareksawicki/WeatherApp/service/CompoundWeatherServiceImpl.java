@@ -46,13 +46,22 @@ public class CompoundWeatherServiceImpl implements CompoundWeatherService {
     weatherForecast = getAverage(serviceList.stream()
       .map(weatherService -> weatherService.getForecast(city, date))
       .collect(Collectors.toList()));
-    forecastRepository.save(Forecast.builder()
-      .weatherForecast(weatherForecast)
-      .localization(city)
-      .forecastDate(date)
-      .forecastAcquiredDate(LocalDateTime.now())
-      .users(Set.of(userRepository.findById(userId).orElseThrow()))
-      .build());
+    if (Objects.nonNull(userId)) {
+      forecastRepository.save(Forecast.builder()
+        .weatherForecast(weatherForecast)
+        .localization(city)
+        .forecastDate(date)
+        .forecastAcquiredDate(LocalDateTime.now())
+        .users(Set.of(userRepository.findById(userId).orElseThrow()))
+        .build());
+    } else {
+      forecastRepository.save(Forecast.builder()
+        .weatherForecast(weatherForecast)
+        .localization(city)
+        .forecastDate(date)
+        .forecastAcquiredDate(LocalDateTime.now())
+        .build());
+    }
     return weatherForecast;
   }
 
@@ -70,13 +79,22 @@ public class CompoundWeatherServiceImpl implements CompoundWeatherService {
     weatherForecast = getAverage(serviceList.stream()
       .map(weatherService -> weatherService.getForecast(lat, lon, date))
       .collect(Collectors.toList()));
-    forecastRepository.save(Forecast.builder()
-      .weatherForecast(weatherForecast)
-      .localization(String.format("%f;%f;", lat, lon))
-      .forecastDate(date)
-      .forecastAcquiredDate(LocalDateTime.now())
-      .users(Set.of(userRepository.findById(userId).orElseThrow()))
-      .build());
+    if (Objects.nonNull(userId)) {
+      forecastRepository.save(Forecast.builder()
+        .weatherForecast(weatherForecast)
+        .localization(String.format("%f;%f;", lat, lon))
+        .forecastDate(date)
+        .forecastAcquiredDate(LocalDateTime.now())
+        .users(Set.of(userRepository.findById(userId).orElseThrow()))
+        .build());
+    } else {
+      forecastRepository.save(Forecast.builder()
+        .weatherForecast(weatherForecast)
+        .localization(String.format("%f;%f;", lat, lon))
+        .forecastDate(date)
+        .forecastAcquiredDate(LocalDateTime.now())
+        .build());
+    }
     return weatherForecast;
   }
 

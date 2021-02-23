@@ -1,5 +1,6 @@
 package com.mareksawicki.WeatherApp.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,6 +10,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import java.util.Objects;
 import java.util.Set;
 
 @Data
@@ -44,7 +46,33 @@ public class User {
   @Column(columnDefinition = "boolean not null default false")
   private Boolean enabled;
 
-  @ManyToMany
+  @ManyToMany(fetch = FetchType.EAGER, mappedBy = "users")
+  @JsonIgnore
   private Set<Forecast> forecasts;
 
+
+  @Override
+  public String toString() {
+    return "User{" +
+      "id=" + id +
+      ", username='" + username + '\'' +
+      ", password='" + password + '\'' +
+      ", email='" + email + '\'' +
+      ", role='" + role + '\'' +
+      ", enabled=" + enabled +
+      '}';
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    User user = (User) o;
+    return id.equals(user.id) && username.equals(user.username) && password.equals(user.password) && email.equals(user.email) && role.equals(user.role) && enabled.equals(user.enabled);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(id, username, password, email, role, enabled);
+  }
 }

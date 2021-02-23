@@ -22,6 +22,14 @@ export class WeatherForecastService {
     return this.http.get<WeatherForecastModel>(`${this.url}-standard?lat=${latitude}&lon=${longitude}`);
   }
 
+  public findWeatherForCityForUser(userId: number, city: string): Observable<WeatherForecastModel> {
+    return this.http.get<WeatherForecastModel>(`${this.url}/${userId}?city=${city}`);
+  }
+
+  public findWeatherForCoordinatesForUser(userId: number, latitude: number, longitude: number): Observable<WeatherForecastModel> {
+    return this.http.get<WeatherForecastModel>(`${this.url}/${userId}?lat=${latitude}&lon=${longitude}`);
+  }
+
   public findWeatherForCityWithDate(userId: number, city: string, date: string): Observable<WeatherForecastModel> {
     return this.http.get<WeatherForecastModel>(`${this.url}/${userId}?city=${city}&date=${date}`);
   }

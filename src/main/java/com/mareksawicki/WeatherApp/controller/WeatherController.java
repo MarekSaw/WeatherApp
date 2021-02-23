@@ -4,7 +4,7 @@ import com.mareksawicki.WeatherApp.entity.WeatherForecast;
 import com.mareksawicki.WeatherApp.exception.ForecastNotFoundException;
 import com.mareksawicki.WeatherApp.service.CompoundWeatherService;
 import com.mareksawicki.WeatherApp.service.ForecastService;
-import com.mareksawicki.WeatherApp.service.WeatherService;
+import com.mareksawicki.WeatherApp.service.UserService;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -21,10 +21,12 @@ public class WeatherController {
 
   private final CompoundWeatherService weatherService;
   private final ForecastService forecastService;
+  private final UserService userService;
 
-  public WeatherController(@Qualifier("compoundWeatherService") CompoundWeatherService weatherService, ForecastService forecastService) {
+  public WeatherController(@Qualifier("compoundWeatherService") CompoundWeatherService weatherService, ForecastService forecastService, UserService userService) {
     this.weatherService = weatherService;
     this.forecastService = forecastService;
+    this.userService = userService;
   }
 
   @GetMapping("/forecast")
@@ -48,11 +50,10 @@ public class WeatherController {
                                              @RequestParam(required = false) Double lat,
                                              @RequestParam(required = false) Double lon) {
     WeatherForecast weatherForecast;
-    Long id = 2L;
     if (Objects.nonNull(city)) {
-      weatherForecast = weatherService.getForecast(id, city);
+      weatherForecast = weatherService.getForecast(null, city);
     } else if (Objects.nonNull(lat) && Objects.nonNull(lon)) {
-      weatherForecast = weatherService.getForecast(id, lat, lon);
+      weatherForecast = weatherService.getForecast(null, lat, lon);
     } else {
       throw new ForecastNotFoundException("One of required parameters was not given");
     }
