@@ -11,7 +11,7 @@ export class ForecastService {
   private readonly url: string;
 
   constructor(private http: HttpClient) {
-    this.url = 'http://localhost:8080/weather-api/forecast';
+    this.url = '/weather-api/forecast';
   }
 
   public getAllForecastsPagination(page: number): Observable<ForecastModel[]> {

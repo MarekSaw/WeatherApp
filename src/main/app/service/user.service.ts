@@ -3,7 +3,7 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {UserModel} from '../components/model/UserModel';
 
-const AUTH_URL = 'http://localhost:8080/user';
+const AUTH_URL = '/user';
 const HTTP_OPTIONS = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
 
 @Injectable({

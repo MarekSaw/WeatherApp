@@ -15,7 +15,7 @@ import java.util.Objects;
 
 
 @RestController
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "https://weather-broadcast-app.herokuapp.com")
 @RequestMapping("/weather-api")
 public class WeatherController {
 

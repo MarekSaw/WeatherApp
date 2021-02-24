@@ -11,7 +11,7 @@ export class WeatherForecastService {
   private readonly url: string;
 
   constructor(private http: HttpClient) {
-    this.url = 'http://localhost:8080/weather-api/weather-forecast';
+    this.url = '/weather-api/weather-forecast';
   }
 
   public findWeatherForCity(city: string): Observable<WeatherForecastModel> {
