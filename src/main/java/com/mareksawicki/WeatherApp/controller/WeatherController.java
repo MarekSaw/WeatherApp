@@ -21,12 +21,10 @@ public class WeatherController {
 
   private final CompoundWeatherService weatherService;
   private final ForecastService forecastService;
-  private final UserService userService;
 
-  public WeatherController(@Qualifier("compoundWeatherService") CompoundWeatherService weatherService, ForecastService forecastService, UserService userService) {
+  public WeatherController(@Qualifier("compoundWeatherService") CompoundWeatherService weatherService, ForecastService forecastService) {
     this.weatherService = weatherService;
     this.forecastService = forecastService;
-    this.userService = userService;
   }
 
   @GetMapping("/forecast")
