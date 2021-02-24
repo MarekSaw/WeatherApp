@@ -100,12 +100,14 @@ public class CompoundWeatherServiceImpl implements CompoundWeatherService {
 
   private WeatherForecast checkIfForecastContainsUserAddIfNot(Forecast previousForecast, Long userId) {
     System.out.println("Returning cached forecast!");
-    User user = userRepository.findById(userId).orElse(null);
-    if (!previousForecast.getUsers().contains(user)) {
-      Set<User> users = previousForecast.getUsers();
-      users.add(user);
-      previousForecast.setUsers(users);
-      forecastRepository.save(previousForecast);
+    if (Objects.nonNull(userId)) {
+      User user = userRepository.findById(userId).orElse(null);
+      if (!previousForecast.getUsers().contains(user)) {
+        Set<User> users = previousForecast.getUsers();
+        users.add(user);
+        previousForecast.setUsers(users);
+        forecastRepository.save(previousForecast);
+      }
     }
     return previousForecast.getWeatherForecast();
   }
