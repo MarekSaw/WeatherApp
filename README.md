@@ -1,6 +1,6 @@
 # WeatherApp
-Angular + Spring Boot application for weather checking, averaging forecast parameters from two weather api endpoints.
-Application saves searched forecasts in database and returns cached forecasts when other users request them.
+Angular + Spring Boot application for weather checking extended from previous Hibernate version.
+Application averages forecast parameters from two weather api endpoints then saves searched forecasts in database and returns cached forecasts when other users request them.
 
 ### Heroku deploy
 Application has been deployed on Heroku where you can see full functionality: https://weather-broadcast-app.herokuapp.com/.
