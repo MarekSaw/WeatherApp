@@ -1,27 +1,22 @@
 # WeatherApp
+Angular + Spring Boot application for weather checking, averaging forecast parameters from two weather api endpoints.
+Application saves searched forecasts in database and returns cached forecasts when other users request them.
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 11.0.7.
+### Heroku deploy
+Application has been deployed on Heroku where you can see full functionality: https://weather-broadcast-app.herokuapp.com/.
 
-## Development server
+### Backend
+* Java 11
+* Spring Boot
+* Spring Web
+* Spring Data JPA
+* Spring Security
+* PostgreSQL
+* Maven
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+### Frontend
+* Angular
+* Bootstrap
 
-## Code scaffolding
-
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
-
-## Build
-
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+### About
+For more information, visit: https://weather-broadcast-app.herokuapp.com/#/about.
