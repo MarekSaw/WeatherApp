@@ -19,6 +19,7 @@ export class LoginComponent implements OnInit {
   errorMessage = '';
   roles: string[] = [];
   username: string;
+  isLoadingSpinnerEnabled: boolean;
 
   constructor(private authService: UserService, private tokenStorage: TokenStorageService) { }
 
@@ -38,6 +39,7 @@ export class LoginComponent implements OnInit {
 
   onSubmit(): void {
     if (this.loginGroup.valid) {
+      this.isLoadingSpinnerEnabled = true;
       this.logIn();
     } else {
       if (!this.loginGroup.get('username').valid) {
@@ -70,12 +72,14 @@ export class LoginComponent implements OnInit {
         this.roles = this.tokenStorage.getUser().roles;
         this.username = this.tokenStorage.getUser().username;
         this.reload();
+        this.isLoadingSpinnerEnabled = false;
       },
       error => {
         this.errorMessage = error.error.message;
         this.isLoginFailed = true;
         $('#errorToast').animate({opacity: '1'});
         this.isAlertActive = true;
+        this.isLoadingSpinnerEnabled = false;
       }
     );
   }
